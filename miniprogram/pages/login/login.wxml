@@ -1,2 +1,27 @@
-<!--miniprogram/pages/login/login.wxml-->
-<text>miniprogram/pages/login/login.wxml</text>
+<view class="container">
+    <view class="login-box">
+        <view class="field">
+            <text><van-icon name="manager-o" />用户名</text>
+            <input
+                value="{{ username }}"
+                type="text"
+                required
+                label="用户名"
+                placeholder="请输入用户名"
+                bindinput="bindUserNameInput"
+            />
+        </view>
+        <view class="field">
+            <text>密码</text>
+            <input
+                value="{{ password }}"
+                type="password"
+                label="密码"
+                placeholder="请输入密码"
+                required
+                bindinput="bindPassWordInput"
+            />
+        </view>
+        <van-button loading="{{ loginStatus }}" type="primary" loading-text="登陆中.." bindtap="toLogin">登录</van-button>
+    </view>
+</view>

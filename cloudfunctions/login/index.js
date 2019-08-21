@@ -5,27 +5,45 @@ const cloud = require('wx-server-sdk')
 
 // 初始化 cloud
 cloud.init()
-
+const db = cloud.database()
+const _ = db.command
 /**
  * 这个示例将经自动鉴权过的小程序用户 openid 返回给小程序端
  * 
  * event 参数包含小程序端调用传入的 data
  * 
  */
-exports.main = (event, context) => {
+exports.main = async (event, context) => {
   console.log(event)
   console.log(context)
-
-  // 可执行其他自定义逻辑
-  // console.log 的内容可以在云开发云函数调用日志查看
+  let isLogin = false
 
   // 获取 WX Context (微信调用上下文)，包括 OPENID、APPID、及 UNIONID（需满足 UNIONID 获取条件）
-  const wxContext = cloud.getWXContext()
+  // const wxContext = cloud.getWXContext()
 
-  return {
-    event,
-    openid: wxContext.OPENID,
-    appid: wxContext.APPID,
-    unionid: wxContext.UNIONID,
+  // return {
+  //   event,
+  //   openid: wxContext.OPENID,
+  //   appid: wxContext.APPID,
+  //   unionid: wxContext.UNIONID,
+  // }
+  let userName =  await db.collection('user').where({
+    username: event.username
+  }).get()
+  // 判断账户是否正确
+  if(userName.data.length > 0) {
+    // 判断账户和密码是否正确
+    let passWord =  await db.collection('user').where({
+      username: event.username,
+      password: event.password
+    }).get()
+    if(passWord.data.length > 0) {
+      return 'success'
+    }else{
+      return '密码错误，请重试'
+    }
+  }else{
+    return '用户名错误，请重试'
   }
+  
 }

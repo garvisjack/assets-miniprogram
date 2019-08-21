@@ -5,7 +5,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    username: '',
+    password: '',
+    loginStatus: false
   },
 
   /**
@@ -13,6 +15,75 @@ Page({
    */
   onLoad: function (options) {
 
+  },
+
+  bindUserNameInput: function(e) {
+    this.setData({
+      username: e.detail.value
+    })
+  },
+
+  bindPassWordInput: function(e) {
+    this.setData({
+      password: e.detail.value
+    })
+  },
+
+  // 提交表单
+  toLogin: function () {
+    // 先校验用户名，存在再校验密码
+    let that = this
+    // if(this.data.username == '') {
+    //   wx.showToast({
+    //     title: '用户名不能为空',
+    //     icon: 'none',
+    //     duration: 2000
+    //   })
+    //   return
+    // }
+    // if(this.data.password == ''){
+    //   wx.showToast({
+    //     title: '密码不能为空',
+    //     icon: 'none',
+    //     duration: 2000
+    //   })
+    //   return
+    // }
+    wx.showLoading({
+      title: '登陆中..',
+    })
+    wx.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'login',
+      // 传递给云函数的event参数
+      data: {
+        username: that.data.username,
+        password: that.data.password,
+      }
+    }).then(res => {
+      console.log(res)
+      wx.hideLoading()
+      if(res.result == 'success') {
+        // 存用户名到缓存
+        wx.setStorageSync('userName', that.data.username)
+        wx.switchTab({
+          url: '/pages/index/index'
+        })
+      }else{
+        wx.showToast({
+          title: res.result,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    }).catch(err => {
+      wx.hideLoading()
+      wx.showToast({
+        title: '登录失败，请重试',
+        icon: 'none',
+        duration: 2000
+      })
+    })
   },
 
   /**

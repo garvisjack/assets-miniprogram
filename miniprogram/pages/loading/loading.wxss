@@ -1,0 +1,4 @@
+/* miniprogram/pages/loading/loading.wxss */
+page{
+    background-color: #fff;
+}
