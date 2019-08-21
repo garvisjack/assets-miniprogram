@@ -33,22 +33,22 @@ Page({
   toLogin: function () {
     // 先校验用户名，存在再校验密码
     let that = this
-    // if(this.data.username == '') {
-    //   wx.showToast({
-    //     title: '用户名不能为空',
-    //     icon: 'none',
-    //     duration: 2000
-    //   })
-    //   return
-    // }
-    // if(this.data.password == ''){
-    //   wx.showToast({
-    //     title: '密码不能为空',
-    //     icon: 'none',
-    //     duration: 2000
-    //   })
-    //   return
-    // }
+    if(this.data.username == '') {
+      wx.showToast({
+        title: '用户名不能为空',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+    if(this.data.password == ''){
+      wx.showToast({
+        title: '密码不能为空',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
     wx.showLoading({
       title: '登陆中..',
     })

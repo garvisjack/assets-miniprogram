@@ -18,7 +18,7 @@ page{
 .login-box .field text{
     float: left;
     width: 100rpx;
-    font-size: 16px;
+    font-size: 32rpx;
     color: #333;
     margin-right: 30rpx;
     height: 100rpx;
@@ -26,11 +26,18 @@ page{
 }
 .login-box .field input{
     display: inline-block;
-    font-size: 16px;
+    font-size: 32rpx;
     color: #333;
     height: 100rpx;
 }
 .login-box button{
-    background-color: #074195;
-    border-color: #074195;
+    background-color: #074195 !important;
+    border-color: #074195  !important;
+    font-size: 32rpx !important;
+}
+.login-box image{
+    float: left;
+    width: 36rpx;
+    height: 36rpx;
+    margin: 32rpx 20rpx 32rpx 20rpx;
 }

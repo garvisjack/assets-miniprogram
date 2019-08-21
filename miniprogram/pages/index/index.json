@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "van-search": "../../vant/search/index"
+  },
+  "navigationBarTitleText": "研发实验室设备管理"
 }

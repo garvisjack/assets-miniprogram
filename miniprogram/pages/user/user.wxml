@@ -1,2 +1,17 @@
-<!--miniprogram/pages/user/user.wxml-->
-<text>miniprogram/pages/user/user.wxml</text>
+<view class="container">
+    <view class="user-top">
+        <van-cell-group>
+            <van-cell title="用户名" value="{{ username }}"/>
+        </van-cell-group>
+    </view>
+    <view class="user-bottom">
+        <van-cell-group>
+            <van-cell title="意见反馈" is-link bindtap="saveAdvice"/>
+            <van-cell title="更新内容" is-link bindtap="updateContent"/>
+            <van-cell title="关于" is-link bindtap="aboutVersion"/>
+        </van-cell-group>
+    </view>
+    <view class="user-outlogin">
+        <van-button loading="{{ loginStatus }}" type="primary" bindtap="outLogin">退出登录</van-button>
+    </view>
+</view>

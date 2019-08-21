@@ -5,16 +5,91 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    username: '',
+    loginStatus: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+      // 全局登录状态
+      if(wx.getStorageSync('userName')) {
+        this.setData({
+          username: wx.getStorageSync('userName')
+        })
+      }else{
+        setTimeout(function() {
+          wx.redirectTo({
+            url: '/pages/login/login'
+          })
+        }, 300)
+      }
   },
 
+  saveAdvice: function() {
+    wx.showModal({
+      title: '意见反馈',
+      showCancel: false,
+      content: '联系陈先生：13588888888',
+      confirmText: '知道了',
+      confirmColor: '#074195',
+      success (res) {
+        if (res.confirm) {
+          
+        } else if (res.cancel) {
+          
+        }
+      }
+    })
+  },
+
+  updateContent: function() {
+    wx.showToast({
+      title: '当前版本为v20190812',
+      icon: 'none',
+      duration: 2000
+    })
+  },
+
+  aboutVersion: function() {
+    wx.showModal({
+      title: '关于',
+      showCancel: false,
+      content: '该小程序版权归公司所有',
+      confirmText: '知道了',
+      confirmColor: '#074195',
+      success (res) {
+        if (res.confirm) {
+          
+        } else if (res.cancel) {
+          
+        }
+      }
+    })
+  },
+
+  outLogin: function() {
+    wx.showModal({
+      title: '提示',
+      content: '确认退出登录？',
+      confirmColor: '#074195',
+      success (res) {
+        if (res.confirm) {
+          wx.removeStorage({
+            key: 'userName',
+            success (res) {
+              wx.redirectTo({
+                url: '/pages/login/login'
+              })
+            }
+          })
+        } else if (res.cancel) {
+          
+        }
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
