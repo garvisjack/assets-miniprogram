@@ -10,8 +10,22 @@ page {
   background: #f5f5f5;
 }
 .home-search{
+  position: relative;
   width: 100%;
   padding: 5rpx 0;
+}
+.home-search .scanCode-image{
+  position: absolute;
+  display: block;
+  right: 20px;
+  top: 13.5px;
+  width: 20px;
+  height: 20px;
+  z-index: 50;
+}
+.home-search input{
+  width: 70%;
+  padding-right: 50px !important;
 }
 .home-banner,.home-banner swiper{
   width: 100%;

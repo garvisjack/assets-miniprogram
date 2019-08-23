@@ -1,0 +1,29 @@
+<!--miniprogram/pages/deviceInfo/index.wxml-->
+<view class="container">
+    <view class="deviceInfo-top">
+        <image src="{{deviceInfo.img_url}}" wx:if="{{deviceInfo.img_url}}"/>
+        <image src="../../images/device/device_demo.jpg" wx:else/>
+        <view class="top-info">
+            <view class="number">设备编号：{{number}}</view>
+            <view class="status">
+                <van-tag type="primary" wx:if="{{deviceUserName}}">借用人：{{deviceUserName}}</van-tag>
+                <van-tag type="primary" wx:else>设备借用：暂无</van-tag>
+            </view>
+            <view class="status">
+                <van-tag type="danger" wx:if="{{rackName}}">借用机柜：{{rackName}}</van-tag>
+                <van-tag type="danger" wx:else>机柜借用：暂无</van-tag>
+            </view>
+        </view>
+    </view>
+    <view class="deviceInfo-bottom">
+        <van-cell-group>
+            <van-cell title="类别" value="{{deviceInfo.cate}}"/>
+            <van-cell title="中文名称" value="{{deviceInfo.name}}"/>
+            <van-cell title="英文名称" value="{{deviceInfo.en_name}}"/>
+            <van-cell title="品牌" value="{{deviceInfo.brand}}"/>
+            <van-cell title="型号" value="{{deviceInfo.model}}"/>
+            <van-cell title="序列号" value="{{deviceInfo.serial_number}}"/>
+            <van-cell title="接收日期" value="{{deviceInfo.receive_time}}"/>
+        </van-cell-group>
+    </view>
+</view>

@@ -7,7 +7,9 @@
             show-action
             bind:search="onSearch"
             bind:cancel="onCancel"
+            maxlength="24"
         />
+        <image src="../../images/icons/icon-scancode.png" class="scanCode-image" bindtap="scanCode"/>
     </view>
     <view class="home-banner">
        <swiper indicator-dots="{{indicatorDots}}"
@@ -15,7 +17,7 @@
             indicator-active-color="{{indicatorActiveColor}}" circular="true">
             <block wx:for="{{imgUrls}}" wx:key="{{index}}">
                 <swiper-item>
-                    <image src="{{item}}" class="slide-image"/>
+                    <image src="{{item.url}}" class="slide-image"/>
                 </swiper-item>
             </block>
         </swiper>
@@ -42,40 +44,40 @@
             你的全部服务
         </view>
         <view class="line">
-            <view class="line-item">
+            <navigator class="line-item">
                 <image src="" class="line-image"/>
                 <text>设备借用</text>
-            </view>
-            <view class="line-item">
+            </navigator>
+            <navigator class="line-item">
                 <image src="" class="line-image"/>
                 <text>机柜借用</text>
-            </view>
-            <view class="line-item">
+            </navigator>
+            <navigator class="line-item">
                 <image src="" class="line-image"/>
                 <text>机柜移动</text>
-            </view>
-            <view class="line-item">
+            </navigator>
+            <navigator class="line-item">
                 <image src="" class="line-image"/>
                 <text>机柜位置</text>
-            </view>
+            </navigator>
         </view>
         <view class="line">
-            <view class="line-item">
+            <navigator class="line-item">
                 <image src="" class="line-image"/>
                 <text>设备台账</text>
-            </view>
-            <view class="line-item">
+            </navigator>
+            <navigator class="line-item">
                 <image src="" class="line-image"/>
                 <text>机柜台账</text>
-            </view>
-            <view class="line-item">
+            </navigator>
+            <navigator class="line-item">
                 <image src="" class="line-image"/>
                 <text>机柜信息</text>
-            </view>
-            <view class="line-item">
+            </navigator>
+            <navigator class="line-item">
                 <image src="" class="line-image"/>
                 <text>状态变更</text>
-            </view>
+            </navigator>
         </view>
     </view>
 </view>

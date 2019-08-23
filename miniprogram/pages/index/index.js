@@ -1,15 +1,15 @@
 //index.js
 const app = getApp()
 
+wx.cloud.init()
+const db = wx.cloud.database()
+const _ = db.command
+
 Page({
   data: {
     // 搜索内容
     searchValue: '',
-    imgUrls: [
-      'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
-      'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
-      'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
-    ],
+    imgUrls: [],
     indicatorDots: true,
     autoplay: true,
     interval: 4000,
@@ -23,20 +23,60 @@ Page({
   },
 
   onLoad: function() {
-   
+    this.getBannerList()
   },
 
   // 开始搜索
   onSearch: function(e) {
+    if(e.detail.value == '') {
+      wx.showToast({
+        title: '搜索内容不能为空',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
     this.setData({
       searchValue: e.detail.value
     })
-    console.log(this.data.searchValue)
+    wx.navigateTo({
+      url: '/pages/deviceInfo/index?number=' + e.detail.value
+    })
   },
 
   onCancel: function() {
     this.setData({
       searchValue: ''
+    })
+  },
+
+  // 获取轮播图数据
+  getBannerList:  function() {
+    db.collection('home_banner').get({
+      success: res => {
+        this.setData({
+          imgUrls: res.data
+        })
+      }
+    })
+  },
+
+  // 扫码编号
+  scanCode: function() {
+    wx.showLoading()
+    wx.scanCode({
+      onlyFromCamera: true,
+      success: res => { 
+        wx.navigateTo({
+          url: '/pages/deviceInfo/index?number=' + res.result
+        })
+      },
+      fail: err => {
+
+      },
+      complete: res => {
+        wx.hideLoading()
+      }
     })
   }
   

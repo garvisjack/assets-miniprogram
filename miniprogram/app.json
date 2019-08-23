@@ -1,7 +1,8 @@
 {
   "pages": [
-    "pages/user/user",
+    "pages/deviceInfo/index",
     "pages/index/index",
+    "pages/user/user",
     "pages/loading/loading",
     "pages/login/login"
   ],
