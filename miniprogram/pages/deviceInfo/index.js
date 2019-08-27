@@ -8,45 +8,60 @@ Page({
     // 设备编号
     number: '',
     // 设备列表信息
-    deviceInfo: [],
+    deviceInfo: '',
     // 借用设备人
     deviceUserName: '',
     // 借用机柜
-    rackName: ''
+    rackNumber: '',
+    noData: true,
+    loading: true
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({
-      number: 'TE0001'
-    })
-    this.getDeviceInfo()
+    if(options.number) {
+      this.setData({
+        number: options.number
+      })
+      this.getDeviceInfo()
+    }
   },
 
   // 获取设备信息
   getDeviceInfo: function() {
-    let that = this
     wx.showLoading()
     wx.cloud.callFunction({
       // 要调用的云函数名称
       name: 'getDeviceInfo',
       // 传递给云函数的event参数
       data: {
-        number: that.data.number
+        number: this.data.number
       }
     }).then(res => {
+      // 基础信息
       if(res.result.deviceInfo.data[0]) {
-        that.setData({
-          deviceInfo: res.result.deviceInfo.data[0]
+        this.setData({
+          deviceInfo: res.result.deviceInfo.data[0],
+          noData: false
         })
       }
+      // 借用人
       if(res.result.deviceUserName.data[0]) {
-        that.setData({
+        this.setData({
           deviceUserName: res.result.deviceUserName.data[0].user_name
         })
       }
+      // 借用的机柜
+      if(res.result.hasDeviceRack.data[0]) {
+        this.setData({
+          rackNumber: res.result.hasDeviceRack.data[0].number
+        })
+      }
+      this.setData({
+        loading: false
+      })
       wx.hideLoading()
     
     }).catch(err => {
@@ -55,6 +70,9 @@ Page({
         title: '获取数据失败，请重试',
         icon: 'none',
         duration: 2000
+      })
+      this.setData({
+        loading: false
       })
     })
   },

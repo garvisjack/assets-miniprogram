@@ -1,13 +1,35 @@
-<view class="steps-class zan-steps zan-steps--{{ type == 'vertical' ? 'vsteps' : 'steps' }} zan-steps--{{ steps.length }} {{ className }}">
-  <view
-    wx:for="{{ steps }}" wx:for-item="step" wx:key="unique" wx:for-index="index"
-    class="zan-steps__step {{ hasDesc ? 'zan-steps__step--db-title' : '' }} {{ index == 0 ? 'zan-steps__step--first-child' : '' }} {{ index == steps.length - 1 ? 'zan-steps__step--last-child' : '' }} {{ step.done ? 'zan-steps__step--done' : '' }} {{ step.current ? 'zan-steps__step--cur' : '' }}"
-  >
-    <view class="zan-steps__title title-class">{{ step.text }}</view>
-    <view wx:if="{{ hasDesc && step.desc }}" class="zan-steps__title zan-steps__title--desc desc-class">{{ step.desc }}</view>
-    <view class="zan-steps__icons icon-class">
-      <view class="zan-steps__circle"></view>
+<wxs src="../wxs/utils.wxs" module="utils" />
+
+<view class="custom-class {{ utils.bem('steps', [direction]) }}">
+  <view class="van-step__wrapper">
+    <view
+      wx:for="{{ steps }}"
+      wx:key="index"
+      class="{{ utils.bem('step', [direction, status(index, active)]) }} van-hairline"
+    >
+      <view class="van-step__title" style="{{ index === active ? 'color: ' + activeColor : '' }}">
+        <view>{{ item.text }}</view>
+        <view>{{ item.desc }}</view>
+      </view>
+      <view class="van-step__circle-container">
+        <view class="van-step__circle" wx:if="{{ index !== active }}" style="{{ index < active ? 'background-color: ' + activeColor : '' }}" />
+        <van-icon wx:else name="checked" color="{{ activeColor }}" custom-class="van-step__active" />
+      </view>
+      <view wx:if="{{ index !== steps.length - 1 }}" class="van-step__line" style="{{ index < active ? 'background-color: ' + activeColor : '' }}" />
     </view>
-    <view class="zan-steps__line"></view>
   </view>
 </view>
+
+<wxs module="status">
+function get(index, active) {
+  if (index < active) {
+    return 'finish';
+  } else if (index === active) {
+    return 'process';
+  }
+
+  return '';
+}
+
+module.exports = get;
+</wxs>

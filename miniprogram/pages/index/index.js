@@ -28,7 +28,7 @@ Page({
 
   // 开始搜索
   onSearch: function(e) {
-    if(e.detail.value == '') {
+    if(e.detail == '' || e.detail == null) {
       wx.showToast({
         title: '搜索内容不能为空',
         icon: 'none',
@@ -36,11 +36,8 @@ Page({
       })
       return
     }
-    this.setData({
-      searchValue: e.detail.value
-    })
     wx.navigateTo({
-      url: '/pages/deviceInfo/index?number=' + e.detail.value
+      url: '/pages/deviceInfo/index?number=' + e.detail
     })
   },
 

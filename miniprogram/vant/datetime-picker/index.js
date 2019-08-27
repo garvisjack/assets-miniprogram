@@ -1,216 +1,287 @@
-'use strict';
-
-var DatePicker = require('./date-picker');
-
-var _require = require('./utils'),
-    genNumber = _require.genNumber,
-    moment = _require.moment;
-
-Component({
-  properties: {
-    placeholder: {
-      type: String,
-      value: '请选择时间'
-    },
-    format: {
-      type: String,
-      value: 'YYYY-MM-DD HH:mm:ss'
-    },
-    pickerView: {
-      type: Boolean
-    },
-    date: {
-      type: String,
-      observer: function observer(value) {
-        if (value === {}.toString()) {
-          throw new Error('参数必须是一个字符串');
-        }
-        if (/^[0-9]+$/.test(value)) {
-          value = +value;
-        }
-        !this._inited && this._init();
-        this.updateDate(value);
-      }
-    },
-    notUse: {
-      type: Array
+import { VantComponent } from '../common/component';
+import { isDef } from '../common/utils';
+import { pickerProps } from '../picker/shared';
+const currentYear = new Date().getFullYear();
+function isValidDate(date) {
+    return isDef(date) && !isNaN(new Date(date).getTime());
+}
+function range(num, min, max) {
+    return Math.min(Math.max(num, min), max);
+}
+function padZero(val) {
+    return `00${val}`.slice(-2);
+}
+function times(n, iteratee) {
+    let index = -1;
+    const result = Array(n < 0 ? 0 : n);
+    while (++index < n) {
+        result[index] = iteratee(index);
     }
-  },
-  externalClasses: ['placeholder-class'],
-  data: {
-    transPos: [0, 0, 0, 0, 0, 0]
-  },
-  attached: function attached() {
-    !this._inited && this._init();
-  },
-
-
-  methods: {
-    _init: function _init() {
-      var _this = this;
-
-      this._inited = true;
-      this.use = {};
-
-      ['years', 'months', 'days', 'hours', 'minutes', 'seconds'].forEach(function (item) {
-        if ((_this.data.notUse || []).indexOf(item) === -1) {
-          _this.use[item] = true;
-        }
-      });
-
-      this.picker = new DatePicker(this.data.date);
-
-      var _picker$getData = this.picker.getData(this.data.date),
-          dataList = _picker$getData.dataList,
-          selected = _picker$getData.selected;
-
-      // 鬼他么知道为什么 dataList, selected 不能一起 setData
-
-
-      this.setData({
-        use: this.use,
-        dataList: dataList
-      }, function () {
-        _this.setData({
-          selected: selected
-        });
-      });
-
-      this._indexs = selected;
+    return result;
+}
+function getTrueValue(formattedValue) {
+    if (!formattedValue)
+        return;
+    while (isNaN(parseInt(formattedValue, 10))) {
+        formattedValue = formattedValue.slice(1);
+    }
+    return parseInt(formattedValue, 10);
+}
+function getMonthEndDay(year, month) {
+    return 32 - new Date(year, month - 1, 32).getDate();
+}
+const defaultFormatter = (_, value) => value;
+VantComponent({
+    classes: ['active-class', 'toolbar-class', 'column-class'],
+    props: Object.assign({}, pickerProps, { formatter: {
+            type: Function,
+            value: defaultFormatter
+        }, value: null, type: {
+            type: String,
+            value: 'datetime'
+        }, showToolbar: {
+            type: Boolean,
+            value: true
+        }, minDate: {
+            type: Number,
+            value: new Date(currentYear - 10, 0, 1).getTime()
+        }, maxDate: {
+            type: Number,
+            value: new Date(currentYear + 10, 11, 31).getTime()
+        }, minHour: {
+            type: Number,
+            value: 0
+        }, maxHour: {
+            type: Number,
+            value: 23
+        }, minMinute: {
+            type: Number,
+            value: 0
+        }, maxMinute: {
+            type: Number,
+            value: 59
+        } }),
+    data: {
+        innerValue: Date.now(),
+        columns: []
     },
-    updatePicker: function updatePicker() {
-      var updateData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-      var _updateData = {};
-
-      for (var _iterator = updateData, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
-        var _ref2;
-
-        if (_isArray) {
-          if (_i >= _iterator.length) break;
-          _ref2 = _iterator[_i++];
-        } else {
-          _i = _iterator.next();
-          if (_i.done) break;
-          _ref2 = _i.value;
-        }
-
-        var _ref = _ref2;
-        var col = _ref.col,
-            index = _ref.index,
-            data = _ref.data;
-
-        if (~index && this._indexs[col] !== index || col === 0) {
-          _updateData['selected[' + col + ']'] = index; // 更新索引
-          this._indexs[col] = index;
-        }
-
-        if (data) {
-          _updateData['dataList[' + col + ']'] = data;
-        }
-      }
-
-      this.setData(_updateData);
+    watch: {
+        value: 'updateValue',
+        type: 'updateValue',
+        minDate: 'updateValue',
+        maxDate: 'updateValue',
+        minHour: 'updateValue',
+        maxHour: 'updateValue',
+        minMinute: 'updateValue',
+        maxMinute: 'updateValue'
     },
-    updateDate: function updateDate(date) {
-      var _this2 = this;
-
-      var _picker$getData2 = this.picker.getData(date),
-          dataList = _picker$getData2.dataList,
-          selected = _picker$getData2.selected;
-
-      this._indexs = selected;
-
-      // 好像必须要等到 datalist 完成
-      this.setData({ dataList: dataList }, function () {
-        _this2.setData({
-          selected: selected,
-          text: _this2.getFormatStr()
-        });
-      });
-    },
-    getFormatStr: function getFormatStr() {
-      var _this3 = this;
-
-      var date = new Date();
-      ['FullYear', 'Month', 'Date', 'Hours', 'Minutes', 'Seconds'].forEach(function (key, index) {
-        var value = _this3.data.dataList[index][_this3._indexs[index]];
-        if (key === 'Month') {
-          value = +_this3.data.dataList[index][_this3._indexs[index]] - 1;
-        }
-        date['set' + key](+value);
-      });
-
-      return moment(date, this.data.format);
-    },
-    showPicker: function showPicker() {
-      this.setData({
-        show: true
-      });
-    },
-    hidePicker: function hidePicker(e) {
-      var action = e.currentTarget.dataset.action;
-
-
-      this.setData({
-        show: false
-      });
-
-      if (action === 'cancel') {
-        this.cancel({
-          detail: {}
-        });
-      } else {
-        this.change({
-          detail: {
-            value: this._indexs
-          }
-        });
-      }
-    },
-    columnchange: function columnchange(e) {
-      var _e$detail = e.detail,
-          column = _e$detail.column,
-          value = _e$detail.value;
-
-      var updateData = this.picker.update(column, value);
-      this.updatePicker(updateData);
-    },
-    change: function change(e) {
-      var value = e.detail.value;
-
-
-      var data = this.data.dataList.map(function (item, index) {
-        return +item[value[index]];
-      });
-
-      var day = data.slice(0, 3);
-      var time = data.slice(3, 6);
-      var date = new Date(day.join('/') + ' ' + time.join(':'));
-
-      this.triggerEvent('change', {
-        value: data,
-        date: date
-      });
-
-      // 手动触发 columnchange
-      for (var index = 0; index < value.length; index++) {
-        if (this._indexs[index] !== value[index]) {
-          this.columnchange({
-            detail: {
-              column: index,
-              value: value[index]
+    methods: {
+        updateValue() {
+            const { data } = this;
+            const val = this.correctValue(this.data.value);
+            const isEqual = val === data.innerValue;
+            if (!isEqual) {
+                this.updateColumnValue(val).then(() => {
+                    this.$emit('input', val);
+                });
             }
-          });
+            else {
+                this.updateColumns();
+            }
+        },
+        getPicker() {
+            if (this.picker == null) {
+                this.picker = this.selectComponent('.van-datetime-picker');
+                const { picker } = this;
+                const { setColumnValues } = picker;
+                picker.setColumnValues = (...args) => setColumnValues.apply(picker, [...args, false]);
+            }
+            return this.picker;
+        },
+        updateColumns() {
+            const { formatter = defaultFormatter } = this.data;
+            const results = this.getRanges().map(({ type, range }) => {
+                const values = times(range[1] - range[0] + 1, index => {
+                    let value = range[0] + index;
+                    value = type === 'year' ? `${value}` : padZero(value);
+                    return formatter(type, value);
+                });
+                return { values };
+            });
+            return this.set({ columns: results });
+        },
+        getRanges() {
+            const { data } = this;
+            if (data.type === 'time') {
+                return [
+                    {
+                        type: 'hour',
+                        range: [data.minHour, data.maxHour]
+                    },
+                    {
+                        type: 'minute',
+                        range: [data.minMinute, data.maxMinute]
+                    }
+                ];
+            }
+            const { maxYear, maxDate, maxMonth, maxHour, maxMinute } = this.getBoundary('max', data.innerValue);
+            const { minYear, minDate, minMonth, minHour, minMinute } = this.getBoundary('min', data.innerValue);
+            const result = [
+                {
+                    type: 'year',
+                    range: [minYear, maxYear]
+                },
+                {
+                    type: 'month',
+                    range: [minMonth, maxMonth]
+                },
+                {
+                    type: 'day',
+                    range: [minDate, maxDate]
+                },
+                {
+                    type: 'hour',
+                    range: [minHour, maxHour]
+                },
+                {
+                    type: 'minute',
+                    range: [minMinute, maxMinute]
+                }
+            ];
+            if (data.type === 'date')
+                result.splice(3, 2);
+            if (data.type === 'year-month')
+                result.splice(2, 3);
+            return result;
+        },
+        correctValue(value) {
+            const { data } = this;
+            // validate value
+            const isDateType = data.type !== 'time';
+            if (isDateType && !isValidDate(value)) {
+                value = data.minDate;
+            }
+            else if (!isDateType && !value) {
+                const { minHour } = data;
+                value = `${padZero(minHour)}:00`;
+            }
+            // time type
+            if (!isDateType) {
+                let [hour, minute] = value.split(':');
+                hour = padZero(range(hour, data.minHour, data.maxHour));
+                minute = padZero(range(minute, data.minMinute, data.maxMinute));
+                return `${hour}:${minute}`;
+            }
+            // date type
+            value = Math.max(value, data.minDate);
+            value = Math.min(value, data.maxDate);
+            return value;
+        },
+        getBoundary(type, innerValue) {
+            const value = new Date(innerValue);
+            const boundary = new Date(this.data[`${type}Date`]);
+            const year = boundary.getFullYear();
+            let month = 1;
+            let date = 1;
+            let hour = 0;
+            let minute = 0;
+            if (type === 'max') {
+                month = 12;
+                date = getMonthEndDay(value.getFullYear(), value.getMonth() + 1);
+                hour = 23;
+                minute = 59;
+            }
+            if (value.getFullYear() === year) {
+                month = boundary.getMonth() + 1;
+                if (value.getMonth() + 1 === month) {
+                    date = boundary.getDate();
+                    if (value.getDate() === date) {
+                        hour = boundary.getHours();
+                        if (value.getHours() === hour) {
+                            minute = boundary.getMinutes();
+                        }
+                    }
+                }
+            }
+            return {
+                [`${type}Year`]: year,
+                [`${type}Month`]: month,
+                [`${type}Date`]: date,
+                [`${type}Hour`]: hour,
+                [`${type}Minute`]: minute
+            };
+        },
+        onCancel() {
+            this.$emit('cancel');
+        },
+        onConfirm() {
+            this.$emit('confirm', this.data.innerValue);
+        },
+        onChange() {
+            const { data } = this;
+            let value;
+            const picker = this.getPicker();
+            if (data.type === 'time') {
+                const indexes = picker.getIndexes();
+                value = `${indexes[0] + data.minHour}:${indexes[1] + data.minMinute}`;
+            }
+            else {
+                const values = picker.getValues();
+                const year = getTrueValue(values[0]);
+                const month = getTrueValue(values[1]);
+                const maxDate = getMonthEndDay(year, month);
+                let date = getTrueValue(values[2]);
+                if (data.type === 'year-month') {
+                    date = 1;
+                }
+                date = date > maxDate ? maxDate : date;
+                let hour = 0;
+                let minute = 0;
+                if (data.type === 'datetime') {
+                    hour = getTrueValue(values[3]);
+                    minute = getTrueValue(values[4]);
+                }
+                value = new Date(year, month - 1, date, hour, minute);
+            }
+            value = this.correctValue(value);
+            this.updateColumnValue(value).then(() => {
+                this.$emit('input', value);
+                this.$emit('change', picker);
+            });
+        },
+        updateColumnValue(value) {
+            let values = [];
+            const { type, formatter = defaultFormatter } = this.data;
+            const picker = this.getPicker();
+            if (type === 'time') {
+                const pair = value.split(':');
+                values = [
+                    formatter('hour', pair[0]),
+                    formatter('minute', pair[1])
+                ];
+            }
+            else {
+                const date = new Date(value);
+                values = [
+                    formatter('year', `${date.getFullYear()}`),
+                    formatter('month', padZero(date.getMonth() + 1))
+                ];
+                if (type === 'date') {
+                    values.push(formatter('day', padZero(date.getDate())));
+                }
+                if (type === 'datetime') {
+                    values.push(formatter('day', padZero(date.getDate())), formatter('hour', padZero(date.getHours())), formatter('minute', padZero(date.getMinutes())));
+                }
+            }
+            return this.set({ innerValue: value })
+                .then(() => this.updateColumns())
+                .then(() => picker.setValues(values));
         }
-      }
-
-      this.setData({
-        text: this.getFormatStr()
-      });
     },
-    cancel: function cancel(e) {
-      this.triggerEvent('cancel', e.detail);
+    created() {
+        const innerValue = this.correctValue(this.data.value);
+        this.updateColumnValue(innerValue).then(() => {
+            this.$emit('input', innerValue);
+        });
     }
-  }
 });

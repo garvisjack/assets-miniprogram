@@ -1,85 +1,105 @@
-'use strict';
-
-// Note that the bitwise operators and shift operators operate on 32-bit ints
-// so in that case, the max safe integer is 2^31-1, or 2147483647
-var VERY_LARGE_NUMBER = 2147483647;
-
-Component({
-  properties: {
-    size: {
-      type: String,
-      value: 'middle'
+import { VantComponent } from '../common/component';
+VantComponent({
+    field: true,
+    classes: [
+        'input-class',
+        'plus-class',
+        'minus-class'
+    ],
+    props: {
+        value: null,
+        integer: Boolean,
+        disabled: Boolean,
+        inputWidth: String,
+        asyncChange: Boolean,
+        disableInput: Boolean,
+        min: {
+            type: null,
+            value: 1
+        },
+        max: {
+            type: null,
+            value: Number.MAX_SAFE_INTEGER
+        },
+        step: {
+            type: null,
+            value: 1
+        },
+        showPlus: {
+            type: Boolean,
+            value: true
+        },
+        showMinus: {
+            type: Boolean,
+            value: true
+        }
     },
-    stepper: {
-      type: Number,
-      value: 1
+    computed: {
+        minusDisabled() {
+            return this.data.disabled || this.data.value <= this.data.min;
+        },
+        plusDisabled() {
+            return this.data.disabled || this.data.value >= this.data.max;
+        }
     },
-    min: {
-      type: Number,
-      value: 1
+    watch: {
+        value(value) {
+            if (value === '') {
+                return;
+            }
+            const newValue = this.range(value);
+            if (typeof newValue === 'number' && +this.data.value !== newValue) {
+                this.set({ value: newValue });
+            }
+        }
     },
-    max: {
-      type: Number,
-      value: VERY_LARGE_NUMBER
+    data: {
+        focus: false
     },
-    step: {
-      type: Number,
-      value: 1
+    created() {
+        this.set({
+            value: this.range(this.data.value)
+        });
+    },
+    methods: {
+        onFocus(event) {
+            this.$emit('focus', event.detail);
+        },
+        onBlur(event) {
+            const value = this.range(this.data.value);
+            this.triggerInput(value);
+            this.$emit('blur', event.detail);
+        },
+        // limit value range
+        range(value) {
+            value = String(value).replace(/[^0-9.-]/g, '');
+            return Math.max(Math.min(this.data.max, value), this.data.min);
+        },
+        onInput(event) {
+            const { value = '' } = event.detail || {};
+            this.triggerInput(value);
+        },
+        onChange(type) {
+            if (this.data[`${type}Disabled`]) {
+                this.$emit('overlimit', type);
+                return;
+            }
+            const diff = type === 'minus' ? -this.data.step : +this.data.step;
+            const value = Math.round((+this.data.value + diff) * 100) / 100;
+            this.triggerInput(this.range(value));
+            this.$emit(type);
+        },
+        onMinus() {
+            this.onChange('minus');
+        },
+        onPlus() {
+            this.onChange('plus');
+        },
+        triggerInput(value) {
+            this.set({
+                value: this.data.asyncChange ? this.data.value : value
+            });
+            this.$emit('change', value);
+        }
     }
-  },
-
-  methods: {
-    handleZanStepperChange: function handleZanStepperChange(e, type) {
-      var _e$currentTarget$data = e.currentTarget.dataset,
-          dataset = _e$currentTarget$data === undefined ? {} : _e$currentTarget$data;
-      var disabled = dataset.disabled;
-      var step = this.data.step;
-      var stepper = this.data.stepper;
-
-
-      if (disabled) return null;
-
-      if (type === 'minus') {
-        stepper -= step;
-      } else if (type === 'plus') {
-        stepper += step;
-      }
-
-      if (stepper < this.data.min || stepper > this.data.max) return null;
-
-      this.triggerEvent('change', stepper);
-      this.triggerEvent(type);
-    },
-    handleZanStepperMinus: function handleZanStepperMinus(e) {
-      this.handleZanStepperChange(e, 'minus');
-    },
-    handleZanStepperPlus: function handleZanStepperPlus(e) {
-      this.handleZanStepperChange(e, 'plus');
-    },
-    handleZanStepperBlur: function handleZanStepperBlur(e) {
-      var _this = this;
-
-      var value = e.detail.value;
-      var _data = this.data,
-          min = _data.min,
-          max = _data.max;
-
-
-      if (!value) {
-        setTimeout(function () {
-          _this.triggerEvent('change', min);
-        }, 16);
-        return;
-      }
-
-      value = +value;
-      if (value > max) {
-        value = max;
-      } else if (value < min) {
-        value = min;
-      }
-
-      this.triggerEvent('change', value);
-    }
-  }
 });

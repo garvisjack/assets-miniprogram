@@ -4,7 +4,6 @@
         <van-search 
             value="{{ value }}"
             placeholder="请输入设备编号"
-            show-action
             bind:search="onSearch"
             bind:cancel="onCancel"
             maxlength="24"

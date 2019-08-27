@@ -1,6 +1,8 @@
+<wxs src="../wxs/utils.wxs" module="utils" />
 
-<view 
-  class="custom-class theme-class zan-tag {{type ? 'zan-tag--'+type : ''}} {{disabled ? 'zan-tag--disabled' : ''}} {{plain ? 'zan-tag--plain' : ''}}"
+<view
+  class="custom-class {{ utils.bem('tag', [size, { mark, plain, round }]) }} {{ plain ? 'van-hairline--surround' : '' }}"
+  style="{{ style }}"
 >
-  <slot></slot>
+  <slot />
 </view>

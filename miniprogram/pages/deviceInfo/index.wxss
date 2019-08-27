@@ -23,7 +23,7 @@ page{
 .deviceInfo-top .top-info .number{
     font-size: 32rpx;
     color: #333;
-    margin-bottom: 25rpx;
+    margin-bottom: 20rpx;
 }
 .deviceInfo-top .top-info .status{
     font-size: 28rpx;
@@ -37,3 +37,4 @@ page{
     width: 100%;
     background-color: #fff;
 }
+

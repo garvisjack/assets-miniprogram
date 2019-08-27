@@ -1,17 +1,17 @@
 <!--miniprogram/pages/deviceInfo/index.wxml-->
-<view class="container">
+<view class="container" wx:if="{{!noData}}">
     <view class="deviceInfo-top">
         <image src="{{deviceInfo.img_url}}" wx:if="{{deviceInfo.img_url}}"/>
         <image src="../../images/device/device_demo.jpg" wx:else/>
         <view class="top-info">
             <view class="number">设备编号：{{number}}</view>
             <view class="status">
-                <van-tag type="primary" wx:if="{{deviceUserName}}">借用人：{{deviceUserName}}</van-tag>
-                <van-tag type="primary" wx:else>设备借用：暂无</van-tag>
+                <van-tag type="success" wx:if="{{deviceUserName}}">借用人：{{deviceUserName}}</van-tag>
+                <van-tag type="success" wx:else>设备借用：暂无</van-tag>
             </view>
             <view class="status">
-                <van-tag type="danger" wx:if="{{rackName}}">借用机柜：{{rackName}}</van-tag>
-                <van-tag type="danger" wx:else>机柜借用：暂无</van-tag>
+                <van-tag type="primary" wx:if="{{rackNumber}}">借用机柜：{{rackNumber}}</van-tag>
+                <van-tag type="primary" wx:else>机柜借用：暂无</van-tag>
             </view>
         </view>
     </view>
@@ -24,6 +24,11 @@
             <van-cell title="型号" value="{{deviceInfo.model}}"/>
             <van-cell title="序列号" value="{{deviceInfo.serial_number}}"/>
             <van-cell title="接收日期" value="{{deviceInfo.receive_time}}"/>
+            <van-cell title="历史信息" is-link value="" arrow-direction="down" />
         </van-cell-group>
     </view>
+</view>
+<view class="empty-data" wx:if="{{noData && !loading}}">
+    <image src="../../images/icons/icon-nodata.png"></image>
+    <text>暂无数据</text>
 </view>

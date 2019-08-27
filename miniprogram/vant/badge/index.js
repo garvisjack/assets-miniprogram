@@ -1,27 +1,30 @@
-'use strict';
-
-var DEFAULT_COLOR = '#fff';
-var DEFAULT_BACKGROUND_COLOR = '#f44';
-var DEFAULT_FONT_SIZE = 10;
-var DEFAULT_BOX_SHADOW = '0 0 0 2px #fff';
-
-Component({
-  properties: {
-    color: {
-      type: String,
-      value: DEFAULT_COLOR
+import { VantComponent } from '../common/component';
+VantComponent({
+    relation: {
+        type: 'ancestor',
+        name: 'badge-group',
+        linked(target) {
+            this.parent = target;
+        }
     },
-    backgroundColor: {
-      type: String,
-      value: DEFAULT_BACKGROUND_COLOR
+    props: {
+        info: null,
+        title: String
     },
-    fontSize: {
-      type: Number,
-      value: DEFAULT_FONT_SIZE
-    },
-    boxShadow: {
-      type: String,
-      value: DEFAULT_BOX_SHADOW
+    methods: {
+        onClick() {
+            const { parent } = this;
+            if (!parent) {
+                return;
+            }
+            const index = parent.badges.indexOf(this);
+            parent.setActive(index).then(() => {
+                this.$emit('click', index);
+                parent.$emit('change', index);
+            });
+        },
+        setActive(active) {
+            return this.set({ active });
+        }
     }
-  }
 });

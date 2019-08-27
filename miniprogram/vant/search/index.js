@@ -1,72 +1,62 @@
-'use strict';
-
-Component({
-  externalClasses: ['search-class', 'input-class', 'cancel-class'],
-  options: {
-    multipleSlots: true // 在组件定义时的选项中启用多slot支持
-  },
-  properties: {
-    cancelText: {
-      type: String,
-      value: '取消'
+import { VantComponent } from '../common/component';
+VantComponent({
+    field: true,
+    classes: ['field-class', 'input-class', 'cancel-class'],
+    props: {
+        label: String,
+        focus: Boolean,
+        error: Boolean,
+        disabled: Boolean,
+        readonly: Boolean,
+        inputAlign: String,
+        showAction: Boolean,
+        useActionSlot: Boolean,
+        placeholder: String,
+        placeholderStyle: String,
+        background: {
+            type: String,
+            value: '#ffffff'
+        },
+        maxlength: {
+            type: Number,
+            value: -1
+        },
+        shape: {
+            type: String,
+            value: 'square'
+        },
+        clearable: {
+            type: Boolean,
+            value: true
+        }
     },
-    disabled: {
-      type: Boolean,
-      value: false
-    },
-    focus: {
-      type: Boolean,
-      value: false
-    },
-    keyword: {
-      type: String,
-      value: ''
-    },
-    show: {
-      type: Array,
-      value: ['icon', 'cancel']
-    },
-    placeholder: {
-      type: String,
-      value: '请输入查询关键字',
-      observer: function observer(newVal) {
-        this.setData({
-          inputWidth: newVal.length * 14 + 45 + 'px'
-        });
-      }
-    },
-    useCancel: {
-      type: Boolean
-    },
-    searchStyle: String,
-    cancelStyle: String,
-    inputStyle: String
-  },
-  data: {
-    inputWidth: 'auto'
-  },
-  methods: {
-    blur: function blur() {
-      this.triggerEvent('blur');
-    },
-    clearInput: function clearInput() {
-      this.setData({
-        focus: true
-      });
-      this.triggerEvent('change', { value: '' });
-    },
-    cancelSearch: function cancelSearch() {
-      this.triggerEvent('cancel');
-    },
-    focus: function focus() {
-      this.triggerEvent('focus');
-    },
-    inputChange: function inputChange(e) {
-      this._inputvalue = e.detail.value;
-      this.triggerEvent('change', { value: e.detail.value });
-    },
-    search: function search(e) {
-      this.triggerEvent('search', { value: e.detail.value });
+    methods: {
+        onChange(event) {
+            this.set({ value: event.detail });
+            this.$emit('change', event.detail);
+        },
+        onCancel() {
+            /**
+             * 修复修改输入框值时，输入框失焦和赋值同时触发，赋值失效
+             * // https://github.com/youzan/vant-weapp/issues/1768
+             */
+            setTimeout(() => {
+                this.set({ value: '' });
+                this.$emit('cancel');
+                this.$emit('change', '');
+            }, 200);
+        },
+        onSearch() {
+            this.$emit('search', this.data.value);
+        },
+        onFocus() {
+            this.$emit('focus');
+        },
+        onBlur() {
+            this.$emit('blur');
+        },
+        onClear() {
+            this.$emit('clear');
+        },
     }
-  }
 });

@@ -1,61 +1,35 @@
-'use strict';
-
-Component({
-  externalClasses: ['active-tab-class'],
-
-  properties: {
-    scroll: {
-      type: Boolean,
-      value: false
+import { VantComponent } from '../common/component';
+VantComponent({
+    relation: {
+        name: 'tabs',
+        type: 'ancestor'
     },
-    fixed: {
-      type: Boolean,
-      value: false
+    props: {
+        dot: Boolean,
+        info: null,
+        title: String,
+        disabled: Boolean,
+        titleStyle: String
     },
-    height: {
-      type: Number,
-      value: 0
+    data: {
+        width: null,
+        inited: false,
+        active: false,
+        animated: false
     },
-    list: {
-      type: Array,
-      value: []
+    watch: {
+        title: 'update',
+        disabled: 'update',
+        dot: 'update',
+        info: 'update',
+        titleStyle: 'update'
     },
-    selectedId: {
-      type: [String, Number],
-      value: ''
+    methods: {
+        update() {
+            const parent = this.getRelationNodes('../tabs/index')[0];
+            if (parent) {
+                parent.updateTabs();
+            }
+        }
     }
-  },
-
-  data: {
-    scrollLeft: 0
-  },
-
-  methods: {
-    _handleScroll: function _handleScroll(selectedId) {
-      var _this = this;
-
-      var query = wx.createSelectorQuery().in(this);
-      query.select('#item-' + selectedId).boundingClientRect();
-      query.select('#scroll-view').boundingClientRect();
-      query.select('#scroll-view').scrollOffset();
-      query.exec(function (res) {
-        _this.setData({
-          scrollLeft: res[2].scrollLeft + res[0].left + res[0].width / 2 - res[1].width / 2
-        });
-      });
-    },
-    _handleZanTabChange: function _handleZanTabChange(e) {
-      var selectedId = e.currentTarget.dataset.itemId;
-
-      if (this.data.scroll) {
-        this._handleScroll(selectedId);
-      }
-
-      this.setData({
-        selectedId: selectedId
-      });
-
-      this.triggerEvent('tabchange', selectedId);
-    }
-  }
 });

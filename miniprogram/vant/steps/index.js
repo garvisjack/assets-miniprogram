@@ -1,23 +1,17 @@
-'use strict';
-
-Component({
-  externalClasses: ['steps-class', 'icon-class', 'title-class', 'desc-class'],
-  properties: {
-    type: {
-      type: String,
-      value: 'horizon'
-    },
-
-    hasDesc: {
-      type: Boolean,
-      value: false
-    },
-
-    steps: { // 必须
-      type: Array,
-      value: []
-    },
-
-    className: String
-  }
+import { VantComponent } from '../common/component';
+import { GREEN } from '../common/color';
+VantComponent({
+    props: {
+        icon: String,
+        steps: Array,
+        active: Number,
+        direction: {
+            type: String,
+            value: 'horizontal'
+        },
+        activeColor: {
+            type: String,
+            value: GREEN
+        }
+    }
 });

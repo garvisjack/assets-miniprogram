@@ -1,33 +1,47 @@
-'use strict';
-
-Component({
-  behaviors: ['wx://form-field'],
-
-  externalClasses: ['radio-class', 'radio-color'],
-
-  properties: {
-    items: Array,
-    type: String
-  },
-
-  methods: {
-    radioChange: function radioChange(e) {
-      this.selectItem(e.detail.value);
-      this.triggerEvent('change', e);
-    },
-    selectItem: function selectItem(value) {
-      var items = this.data.items;
-
-
-      items.forEach(function (item) {
-        if (item.name === value) {
-          item.checked = true;
-        } else {
-          item.checked = false;
+import { VantComponent } from '../common/component';
+VantComponent({
+    field: true,
+    relation: {
+        name: 'radio-group',
+        type: 'ancestor',
+        linked(target) {
+            this.parent = target;
+        },
+        unlinked() {
+            this.parent = null;
         }
-      });
-
-      this.setData({ items: items });
+    },
+    classes: ['icon-class', 'label-class'],
+    props: {
+        value: null,
+        disabled: Boolean,
+        useIconSlot: Boolean,
+        checkedColor: String,
+        labelPosition: {
+            type: String,
+            value: 'right'
+        },
+        labelDisabled: Boolean,
+        shape: {
+            type: String,
+            value: 'round'
+        }
+    },
+    methods: {
+        emitChange(value) {
+            const instance = this.parent || this;
+            instance.$emit('input', value);
+            instance.$emit('change', value);
+        },
+        onChange(event) {
+            console.log(event);
+            this.emitChange(this.data.name);
+        },
+        onClickLabel() {
+            const { disabled, labelDisabled, name } = this.data;
+            if (!disabled && !labelDisabled) {
+                this.emitChange(name);
+            }
+        }
     }
-  }
 });

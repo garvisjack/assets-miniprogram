@@ -1,13 +1,17 @@
-'use strict';
-
-Component({
-  properties: {
-    type: {
-      type: String,
-      value: 'circle'
-    },
-    color: {
-      type: String
+import { VantComponent } from '../common/component';
+VantComponent({
+    props: {
+        size: {
+            type: String,
+            value: '30px'
+        },
+        type: {
+            type: String,
+            value: 'circular'
+        },
+        color: {
+            type: String,
+            value: '#c9c9c9'
+        }
     }
-  }
 });

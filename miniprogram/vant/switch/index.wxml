@@ -1,12 +1,11 @@
+<wxs src="../wxs/utils.wxs" module="utils" />
+
 <view
-  class="custom-class theme-class zan-switch zan-switch--{{ checked ? 'on' : 'off' }} {{ disabled ? 'zan-swtich--disabled' : '' }}"
-  checked="{{ checked }}"
-  loading="{{ loading }}"
-  disabled="{{ disabled }}"
-  bindtap="handleZanSwitchChange"
+  class="custom-class {{ utils.bem('switch', { on: value === activeValue, disabled }) }}"
+  style="font-size: {{ size }}; {{ (checked ? activeColor : inactiveColor) ? 'background-color: ' + (checked ? activeColor : inactiveColor ) : '' }}"
+  bind:tap="onClick"
 >
-  <view class="zan-switch__circle">
-    <view hidden="{{ !loading }}" class="zan-switch__loading"></view>
+  <view class="van-switch__node node-class">
+    <van-loading wx:if="{{ loading }}" size="50%" custom-class="van-switch__loading" />
   </view>
-  <view class="zan-switch__bg"></view>
 </view>

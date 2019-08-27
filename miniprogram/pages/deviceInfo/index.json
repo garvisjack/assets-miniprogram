@@ -1,9 +1,9 @@
 {
   "usingComponents": {
-    "van-cell": "../../vant/cell/index",
-    "van-cell-group": "../../vant/cell-group/index",
-    "van-button": "../../vant/btn/index",
-    "van-tag": "../../vant/tag/index"
+      "van-cell": "../../vant/cell/index",
+      "van-cell-group": "../../vant/cell-group/index",
+      "van-button": "../../vant/button/index",
+      "van-tag": "../../vant/tag/index"
   },
   "navigationBarTitleText": "设备信息"
 }
