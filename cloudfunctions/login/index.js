@@ -20,12 +20,12 @@ exports.main = async (event, context) => {
   // 判断账户是否正确
   if(userName.data.length > 0) {
     // 判断账户和密码是否正确
-    let passWord =  await db.collection('user').where({
+    let userInfo =  await db.collection('user').where({
       username: event.username,
       password: event.password
     }).get()
-    if(passWord.data.length > 0) {
-      return 'success'
+    if(userInfo.data.length > 0) {
+      return {msg: 'success', userInfo}
     }else{
       return '密码错误，请重试'
     }

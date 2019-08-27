@@ -43,7 +43,7 @@
             你的全部服务
         </view>
         <view class="line">
-            <navigator class="line-item">
+            <navigator class="line-item" url="/pages/borrow/index">
                 <image src="" class="line-image"/>
                 <text>设备借用</text>
             </navigator>

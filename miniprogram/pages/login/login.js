@@ -63,9 +63,9 @@ Page({
     }).then(res => {
       console.log(res)
       wx.hideLoading()
-      if(res.result == 'success') {
+      if(res.result.msg == 'success') {
         // 存用户名到缓存
-        wx.setStorageSync('userName', that.data.username)
+        wx.setStorageSync('userInfo', JSON.stringify(res.result.userInfo.data[0]))
         wx.switchTab({
           url: '/pages/index/index'
         })

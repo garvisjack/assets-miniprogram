@@ -14,9 +14,10 @@ Page({
    */
   onLoad: function (options) {
       // 全局登录状态
-      if(wx.getStorageSync('userName')) {
+      if(wx.getStorageSync('userInfo')) {
+        let userInfo = JSON.parse(wx.getStorageSync('userInfo'));
         this.setData({
-          username: wx.getStorageSync('userName')
+          username: userInfo.name
         })
       }else{
         setTimeout(function() {
