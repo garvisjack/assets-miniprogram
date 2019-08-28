@@ -1,2 +1,36 @@
-<!--miniprogram/pages/deviceSend/index.wxml-->
-<text>miniprogram/pages/deviceSend/index.wxml</text>
+<view class="container" wx:if="{{!noData}}">
+    <block wx:for="{{deviceList}}" wx:key="{{index}}">
+        <view class="send-box" wx:if="{{item.send_status == 1}}">
+            <view class="status">借用中</view>
+            <van-panel use-footer-slot>
+                <view class="device-info">
+                    <text>设备编号：{{item.device_number}}</text>
+                    <text>设备名称：{{item.device_name}}</text>
+                    <text>预计归还时间：{{item.expect_return_time}}</text>
+                    <text wx:if="{{item.real_return_time}}">实际归还时间：{{item.real_return_time}}</text>
+                </view>
+                <view slot="footer">
+                    <van-button size="small" type="primary" bindtap="returnDevice">归还</van-button>
+                </view>
+            </van-panel>
+        </view>
+        <view class="send-box" wx:else>
+            <view class="status disabled">已归还</view>
+            <van-panel use-footer-slot header-class="disabled">
+                <view class="device-info">
+                    <text>设备编号：{{item.device_number}}</text>
+                    <text>设备名称：{{item.device_name}}</text>
+                    <text>预计归还时间：{{item.expect_return_time}}</text>
+                    <text wx:if="{{item.real_return_time}}">实际归还时间：{{item.real_return_time}}</text>
+                </view>
+                <view slot="footer">
+                    <van-button size="small" type="info">去借用</van-button>
+                </view>
+            </van-panel>
+        </view>
+    </block>
+</view>
+<view class="empty-data" wx:if="{{noData && !loading}}">
+    <image src="../../images/icons/icon-nodata.png"></image>
+    <text>暂无数据</text>
+</view>

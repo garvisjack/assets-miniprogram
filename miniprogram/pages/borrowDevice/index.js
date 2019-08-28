@@ -7,7 +7,7 @@ Page({
   data: {
     number: '',
     dateTime: '',
-    username: '',
+    userInfo: '',
     dateText: '预计归还时间',
     minHour: 10,
     maxHour: 20,
@@ -33,7 +33,7 @@ Page({
     if(wx.getStorageSync('userInfo')) {
       let userInfo = JSON.parse(wx.getStorageSync('userInfo'));
       this.setData({
-        username: userInfo.name
+        userInfo: userInfo
       })
     }
   },
@@ -88,7 +88,8 @@ Page({
     let nowDate = new Date().getTime()
     let sendTime = this.formatTime(nowDate)
     let options = {
-      username: this.data.username,
+      username: this.data.userInfo.name,
+      userId: this.data.userInfo._id,
       number: this.data.number,
       dateTime: this.data.dateTime,
       sendTime: sendTime
@@ -115,6 +116,7 @@ Page({
           title: '提示',
           showCancel: true,
           content: '借用成功！',
+          cancelText: '继续',
           confirmText: '查看设备',
           confirmColor: '#074195',
           success (res) {

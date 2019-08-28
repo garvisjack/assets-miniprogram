@@ -1,3 +1,8 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "van-panel": "../../vant/panel/index",
+    "van-button": "../../vant/button/index",
+    "van-icon": "../../vant/icon/index"
+  },
+  "navigationBarTitleText": "设备借用查询"
 }
