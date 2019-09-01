@@ -6,6 +6,7 @@ Page({
    */
   data: {
     number: '',
+    project: '',
     dateTime: '',
     userInfo: '',
     dateText: '预计归还日期',
@@ -49,6 +50,12 @@ Page({
     })
   },
 
+  bindProject: function(e) {
+    this.setData({
+      project: e.detail.value
+    })
+  },
+
   onInput(event) {
     this.setData({
       currentDate: event.detail
@@ -62,7 +69,7 @@ Page({
       dateText: dateTime
     });
     this.setData({ showPop: false });
-    console.log(this.data.dateTime)
+
   },
 
   timeCancel: function() {
@@ -76,7 +83,15 @@ Page({
   goConfirm: function () {
     if(this.data.number == '') {
       wx.showToast({
-        title: '设备编号不能为空',
+        title: '机柜编号不能为空',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+    if(this.data.project == ''){
+      wx.showToast({
+        title: '项目名称不能为空',
         icon: 'none',
         duration: 2000
       })
@@ -96,6 +111,7 @@ Page({
       username: this.data.userInfo.name,
       userId: this.data.userInfo._id,
       number: this.data.number,
+      project: this.data.project,
       dateTime: this.data.dateTime,
       sendTime: sendTime
     }
@@ -104,30 +120,31 @@ Page({
     })
     wx.cloud.callFunction({
       // 要调用的云函数名称
-      name: 'borrowDevice',
+      name: 'borrowRack',
       // 传递给云函数的event参数
       data: options
     }).then(res => {
+      console.log(res)
       if(res.result == 'exist') {
         wx.showToast({
-          title: '借用失败，设备已借用',
+          title: '借用失败，机柜已借用',
           icon: 'none',
           duration: 2000
         })
         return
       }
-      if(res.result.sendDevice._id) {
+      if(res.result.sendRack._id) {
         wx.showModal({
           title: '提示',
           showCancel: true,
           content: '借用成功！',
           cancelText: '继续',
-          confirmText: '查看设备',
+          confirmText: '查看机柜',
           confirmColor: '#074195',
           success (res) {
             if (res.confirm) {
               wx.navigateTo({
-                url: '/pages/deviceSend/index'
+                url: '/pages/rackSend/index'
               })
             } else if (res.cancel) {
               
@@ -170,6 +187,7 @@ Page({
   },
 
   formatTime: function(number, format) {
+
     function formatNumber(n) {
       n = n.toString()
       return n[1] ? n : '0' + n

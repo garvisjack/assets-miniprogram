@@ -15,7 +15,7 @@ exports.main = async (event, context) => {
   // 查询借用中的设备
   let deviceUserName =  await db.collection('device_send').where({
     device_number: event.number,
-    send_status: '1'
+    send_status: 1
   }).get()
 
   // 查询机柜是否借用设备

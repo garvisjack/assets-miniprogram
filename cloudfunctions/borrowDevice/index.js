@@ -9,7 +9,8 @@ const _ = db.command
 exports.main = async (event, context) => {
   // 检查是否已经被人借用
   let hasDevice =  await db.collection('device_send').where({
-    device_number: event.number
+    device_number: event.number,
+    send_status: 1
   }).get()
 
   // 查询机柜是否借用设备

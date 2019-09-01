@@ -40,6 +40,7 @@ Page({
         number: this.data.number
       }
     }).then(res => {
+      console.log(res)
       // 基础信息
       if(res.result.deviceInfo.data[0]) {
         this.setData({

@@ -1,17 +1,17 @@
 <view class="container" wx:if="{{!noData}}">
-    <block wx:for="{{deviceList}}" wx:key="{{index}}">
+    <block wx:for="{{rackList}}" wx:key="{{index}}">
         <view class="send-box" wx:if="{{item.send_status == 1}}">
             <view class="status">借用中</view>
             <van-panel use-footer-slot>
                 <view class="device-info">
-                    <text data-number="{{item.device_number}}" style="text-decoration:underline;color:#074195" bindtap="goDeviceInfo">设备编号：{{item.device_number}}</text>
-                    <text>设备名称：{{item.device_name}}</text>
+                    <text data-number="{{item.rack_number}}" style="text-decoration:underline;color:#074195" bindtap="goRackInfo">机柜编号：{{item.rack_number}}</text>
+                    <text>项目名称：{{item.project}}</text>
                     <text>借用日期：{{item.send_time}}</text>
                     <text>预计归还日期：{{item.expect_return_time}}</text>
                     <text wx:if="{{item.real_return_time}}">实际归还时间：{{item.real_return_time}}</text>
                 </view>
                 <view slot="footer">
-                    <van-button size="small" type="info" bindtap="returnDevice" data-id="{{item._id}}">归还</van-button>
+                    <van-button size="small" type="info" bindtap="returnRack" data-id="{{item._id}}">归还</van-button>
                 </view>
             </van-panel>
         </view>
@@ -19,14 +19,14 @@
             <view class="status disabled">已归还</view>
             <van-panel use-footer-slot header-class="disabled">
                 <view class="device-info">
-                    <text data-number="{{item.device_number}}" style="text-decoration:underline;color:#074195" bindtap="goDeviceInfo">设备编号：{{item.device_number}}</text>
-                    <text>设备名称：{{item.device_name}}</text>
+                    <text data-number="{{item.rack_number}}" style="text-decoration:underline;color:#074195" bindtap="goRackInfo">机柜编号：{{item.rack_number}}</text>
+                    <text>项目名称：{{item.project}}</text>
                     <text>借用日期：{{item.send_time}}</text>
                     <text>预计归还日期：{{item.expect_return_time}}</text>
                     <text wx:if="{{item.real_return_time}}">实际归还日期：{{item.real_return_time}}</text>
                 </view>
                 <view slot="footer">
-                    <van-button size="small" type="primary" plain data-number="{{item.device_number}}" bindtap="goBorrowDevice">去借用</van-button>
+                    <van-button size="small" type="primary" plain data-number="{{item.rack_number}}" bindtap="goBorrowRack">去借用</van-button>
                 </view>
             </van-panel>
         </view>

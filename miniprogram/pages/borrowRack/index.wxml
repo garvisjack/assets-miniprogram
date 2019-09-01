@@ -1,0 +1,45 @@
+<view class="container">
+    <view class="borrow-device">
+        <view class="line">
+            <input
+                value="{{ number }}"
+                type="text"
+                required
+                label="机柜编号"
+                placeholder="请输入机柜编号或扫码"
+                bindinput="bindNumber"
+                placeholder-style="color:#666;"
+            />
+            <view bindtap="goScan" class="scan-btn">扫一扫</view>
+        </view>
+        <view class="line">
+            <input
+                value="{{ project }}"
+                type="text"
+                required
+                label="项目名称"
+                placeholder="请输入项目名称"
+                bindinput="bindProject"
+                placeholder-style="color:#666;"
+            />
+        </view>
+        <view class="line">
+            <van-cell title="{{dateText}}" is-link value="" bindtap="chooseDate" border="{{ false }}"/>
+            <van-popup show="{{ showPop }}" bind:close="onClose" position="bottom" overlay="{{ false }}">
+                <van-datetime-picker
+                    type="datetime"
+                    value="{{ currentDate }}"
+                    min-date="{{ minDate }}"
+                    bind:input="onInput"
+                    formatter="{{ formatter }}"
+                    bind:confirm="timeConfirm"
+                    bind:cancel="timeCancel"
+                />
+            </van-popup>
+        </view>
+        <view style="width: 650rpx; padding: 0 10rpx;margin-top:50rpx">
+            <van-button type="primary" bindtap="goConfirm">确认</van-button>
+        </view>
+    </view>
+
+</view>

@@ -1,11 +1,11 @@
-// miniprogram/pages/deviceSend/index.js
+// miniprogram/pages/rackSend/index.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    deviceList: [],
+    rackList: [],
     userInfo: '',
     noData: true,
     curPage: 1,
@@ -23,31 +23,31 @@ Page({
         userInfo: userInfo
       })
     }
-    this.getDeviceSend()
+    this.getRackSend()
   },
 
   resetPage: function() {
     this.setData({
-      deviceList: [],
+      rackList: [],
       curPage: 1
     })
   },
 
-  goBorrowDevice: function(event) {
+  goBorrowRack: function(event) {
     let number = event.currentTarget.dataset.number;
     wx.navigateTo({
-      url: `/pages/borrowDevice/index?number=${number}`
+      url: `/pages/borrowRack/index?number=${number}`
     })
   },
 
-  goDeviceInfo: function(event) {
+  goRackInfo: function(event) {
     let number = event.currentTarget.dataset.number;
     wx.navigateTo({
-      url: `/pages/deviceInfo/index?number=${number}`
+      url: `/pages/rackInfo/index?number=${number}`
     })
   },
 
-  returnDevice: function(event) {
+  returnRack: function(event) {
     let _id = event.currentTarget.dataset.id;
     let that = this;
     let nowDate = new Date().getTime()
@@ -59,14 +59,14 @@ Page({
         if (res.confirm) {
           wx.cloud.callFunction({
             // 要调用的云函数名称
-            name: 'returnDevice',
+            name: 'returnRack',
             // 传递给云函数的event参数
             data: {
               id: _id,
               realReturnTime: that.formatTime(nowDate, 'Y/M/D h:m:s')
             }
           }).then(res => {
-            if(res.result.returnDevice.stats.updated == 1) {
+            if(res.result.returnRack.stats.updated == 1) {
               that.resetPage();
               that.onLoad();
               wx.showToast({
@@ -98,11 +98,11 @@ Page({
     })
   },  
 
-  getDeviceSend: function() {
+  getRackSend: function() {
     wx.showLoading()
     wx.cloud.callFunction({
       // 要调用的云函数名称
-      name: 'getDeviceSend',
+      name: 'getRackSend',
       // 传递给云函数的event参数
       data: {
         pageIndex: this.data.curPage,
@@ -111,14 +111,14 @@ Page({
       }
     }).then(res => {
       // 获取设备借用表中数据
-      if(res.result.deviceSend.data.length) {
+      if(res.result.rackSend.data.length) {
         this.setData({
-          deviceList: this.data.deviceList.concat(res.result.deviceSend.data),
+          rackList: this.data.rackList.concat(res.result.rackSend.data),
           noData: false
         })
-        console.log(this.data.deviceList)
+        console.log(this.data.rackList)
       }else{
-        if(this.data.deviceList.length == 0) {
+        if(this.data.rackList.length == 0) {
           this.setData({
             noData: true
           })
@@ -198,7 +198,7 @@ Page({
    */
   onPullDownRefresh: function () {
     this.data.curPage = 1
-    this.getDeviceSend()
+    this.getRackSend()
   },
 
   /**
@@ -206,7 +206,7 @@ Page({
    */
   onReachBottom: function () {
     this.data.curPage++
-    this.getDeviceSend()
+    this.getRackSend()
   },
 
   /**

@@ -16,15 +16,15 @@ Page({
       title: '登陆中..',
     })
     // 全局登录状态
-    if(wx.getStorageSync('userName')) {
-      console.log(wx.getStorageSync('userName') + ' is login')
+    if(wx.getStorageSync('userInfo')) {
+      console.log('login')
       setTimeout(function() {
         wx.switchTab({
           url: '/pages/index/index'
         })
       }, 300)
     }else{
-      console.log('尚未登录')
+      console.log('no login')
       setTimeout(function() {
         wx.redirectTo({
           url: '/pages/login/login'

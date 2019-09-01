@@ -24,16 +24,20 @@
     <!--数据展示-->
     <view class="home-device-status">
         <view class="item">
-            <text>机柜借用数量</text>
-            <view class="item-num">
-                <text>{{rackNum}} (<text class="expired-num">{{rackExpiredNum}}</text>)</text>
-            </view>
+            <navigator class="line-item" url="/pages/rackSend/index">
+                <text>机柜借用数量</text>
+                <view class="item-num">
+                    <text>{{rackNum}} (<text class="expired-num">{{rackExpiredNum}}</text>)</text>
+                </view>
+            </navigator>
         </view>
         <view class="item">
-            <text>设备借用数量</text>
-            <view class="item-num">
-                <text>{{deviceNum}} (<text class="expired-num">{{deviceExpiredNum}}</text>)</text>
-            </view>
+            <navigator class="line-item" url="/pages/deviceSend/index">
+                <text>设备借用数量</text>
+                <view class="item-num">
+                    <text>{{deviceNum}} (<text class="expired-num">{{deviceExpiredNum}}</text>)</text>
+                </view>
+            </navigator>
         </view>
     </view>
     <!--板卡入口-->
@@ -43,11 +47,11 @@
             你的全部服务
         </view>
         <view class="line">
-            <navigator class="line-item" url="/pages/borrow/index">
+            <navigator class="line-item" url="/pages/borrowDevice/index">
                 <image src="" class="line-image"/>
                 <text>设备借用</text>
             </navigator>
-            <navigator class="line-item">
+            <navigator class="line-item" url="/pages/borrowRack/index">
                 <image src="" class="line-image"/>
                 <text>机柜借用</text>
             </navigator>
