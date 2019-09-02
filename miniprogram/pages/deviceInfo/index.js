@@ -55,6 +55,7 @@ Page({
         })
       }
       // 借用的机柜
+      console.log(res.result)
       if(res.result.hasDeviceRack.data[0]) {
         this.setData({
           rackNumber: res.result.hasDeviceRack.data[0].number

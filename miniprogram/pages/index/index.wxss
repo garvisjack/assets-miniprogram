@@ -27,8 +27,12 @@ page {
   padding-right: 50px !important;
   font-size: 28rpx;
 }
+.home-banner{
+  overflow: hidden;
+}
 .home-banner,.home-banner swiper{
-  width: 100%;
+  width: 99.9%;
+  margin: 0 0.05%;
   height: 400rpx;
 }
 .home-banner .slide-image{

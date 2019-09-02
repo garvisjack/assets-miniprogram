@@ -19,13 +19,13 @@ exports.main = async (event, context) => {
   }).get()
 
   // 查询机柜是否借用设备
-  let hasDeviceRack =  await db.collection('rack_list').where(_.or[
+  let hasDeviceRack =  await db.collection('rack_list').where(_.or([
     { com: event.number },
     { power: event.number },
     { 34970: event.number },
     { 34910: event.number },
     { other: event.number }
-  ]).get()
+  ])).get()
 
   return {
     deviceInfo,
