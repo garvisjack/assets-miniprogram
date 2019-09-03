@@ -1,0 +1,26 @@
+<view class="container">
+    
+    <view class="table">
+        <view class="tr bg-w">
+            <view class="th">设备编号</view>
+            <view class="th">名称</view>
+            <view class="th ">借用人</view>
+            <view class="th ">预计归还时间</view>
+        </view>
+        <block wx:for="{{deviceList}}" wx:key="{{index}}">
+            <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
+                <view class="td">{{item.device_number}}</view>
+                <view class="td">{{item.device_name}}</view>
+                <view class="td">{{item.user_name}}</view>
+                <view class="td">{{item.expect_return_time}}</view>
+            </view>
+            <view class="tr" wx:else>
+                <view class="td">{{item.device_number}}</view>
+                <view class="td">{{item.device_name}}</view>
+                <view class="td">{{item.user_name}}</view>
+                <view class="td">{{item.expect_return_time}}</view>
+            </view>
+        </block>
+    </view>
+
+</view>

@@ -65,7 +65,7 @@
             </navigator>
         </view>
         <view class="line">
-            <navigator class="line-item">
+            <navigator class="line-item" url="/pages/deviceAccount/index">
                 <image src="" class="line-image"/>
                 <text>设备台账</text>
             </navigator>

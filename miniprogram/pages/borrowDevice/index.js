@@ -108,6 +108,7 @@ Page({
       // 传递给云函数的event参数
       data: options
     }).then(res => {
+      console.log(res.result)
       if(res.result == 'exist') {
         wx.showToast({
           title: '借用失败，设备已借用',

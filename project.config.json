@@ -33,7 +33,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 2,
 			"list": [
 				{
 					"id": -1,
@@ -45,6 +45,13 @@
 					"id": -1,
 					"name": "rackSend",
 					"pathName": "pages/rackSend/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "deviceAccount",
+					"pathName": "pages/deviceAccount/index",
 					"scene": null
 				}
 			]
