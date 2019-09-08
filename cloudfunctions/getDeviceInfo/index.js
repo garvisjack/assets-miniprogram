@@ -22,8 +22,8 @@ exports.main = async (event, context) => {
   let hasDeviceRack =  await db.collection('rack_list').where(_.or([
     { com: event.number },
     { power: event.number },
-    { 34970: event.number },
-    { 34910: event.number },
+    { '34970': event.number },
+    { '34910': event.number },
     { other: event.number }
   ])).get()
 

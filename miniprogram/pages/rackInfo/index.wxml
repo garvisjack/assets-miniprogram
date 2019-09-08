@@ -1,0 +1,122 @@
+<view class="container">
+    <view class="home-search">
+        <van-search 
+            value="{{ searchValue }}"
+            placeholder="请输入机柜编号"
+            bind:search="onSearch"
+            bind:cancel="onCancel"
+            maxlength="24"
+        />
+        <image src="../../images/icons/icon-scancode.png" class="scanCode-image" bindtap="scanCode"/>
+    </view>
+    <view class="rack-info" wx:if="{{!noData}}">
+        <view class="send-box" wx:if="{{rackInfo.com}}">
+            <view class="status">
+                <van-button wx:if="{{rackInfo.com.length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.com}}" data-part="com">移除</van-button>
+                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.com}}" data-part="com">增加</van-button>
+            </view>
+            <van-panel use-footer-slot>
+                <view class="device-info">
+                    <text style="color:#074195;height:30px;line-height:30px" bindtap="goDeviceInfo">电脑</text>
+                    <block wx:for="{{rackInfo.com}}" wx:key="idx" wx:for-item="val">
+                        <text>{{val}}</text>
+                    </block>
+                </view>
+            </van-panel>
+        </view>
+
+        <view class="send-box" wx:if="{{rackInfo.power}}">
+            <view class="status">
+                <van-button wx:if="{{rackInfo.power.length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.power}}" data-part="power">移除</van-button>
+                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.power}}" data-part="power">增加</van-button>
+            </view>
+            <van-panel use-footer-slot>
+                <view class="device-info">
+                    <text style="color:#074195;height:30px;line-height:30px" bindtap="goDeviceInfo">电源</text>
+                    <block wx:for="{{rackInfo.power}}" wx:key="idx" wx:for-item="val">
+                        <text>{{val}}</text>
+                    </block>
+                </view>
+            </van-panel>
+        </view>
+
+        <view class="send-box" wx:if="{{rackInfo['34970']}}">
+            <view class="status">
+                <van-button wx:if="{{rackInfo['34970'].length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo['34970']}}" data-part="34970">移除</van-button>
+                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo['34970']}}" data-part="34970">增加</van-button>
+            </view>
+            <van-panel use-footer-slot>
+                <view class="device-info">
+                    <text style="color:#074195;height:30px;line-height:30px" bindtap="goDeviceInfo">34970</text>
+                    <block wx:for="{{rackInfo['34970']}}" wx:key="idx" wx:for-item="val">
+                        <text>{{val}}</text>
+                    </block>
+                </view>
+            </van-panel>
+        </view>
+
+        <view class="send-box" wx:if="{{rackInfo['34901']}}">
+            <view class="status">
+                <van-button wx:if="{{rackInfo['34901'].length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo['34901']}}" data-part="34901">移除</van-button>
+                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo['34901']}}" data-part="34901">增加</van-button>
+            </view>
+            <van-panel use-footer-slot>
+                <view class="device-info">
+                    <text style="color:#074195;height:30px;line-height:30px" bindtap="goDeviceInfo">34901</text>
+                    <block wx:for="{{rackInfo['34901']}}" wx:key="idx" wx:for-item="val">
+                        <text>{{val}}</text>
+                    </block>
+                </view>
+            </van-panel>
+        </view>
+
+        <view class="send-box" wx:if="{{rackInfo.other}}">
+            <view class="status">
+                <van-button wx:if="{{rackInfo.other.length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.other}}" data-part="other">移除</van-button>
+                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.other}}" data-part="other">增加</van-button>
+            </view>
+            <van-panel use-footer-slot>
+                <view class="device-info">
+                    <text style="color:#074195;height:30px;line-height:30px" bindtap="goDeviceInfo">其他组件</text>
+                    <block wx:for="{{rackInfo.other}}" wx:key="idx" wx:for-item="val">
+                        <text>{{val}}</text>
+                    </block>
+                </view>
+            </van-panel>
+        </view>
+
+
+    </view>
+</view>
+
+<view class="empty-data" wx:if="{{noData && !loading}}">
+    <image src="../../images/icons/icon-nodata.png"></image>
+    <text>暂无数据</text>
+</view>
+<van-popup show="{{ showPicker }}" bind:close="onClose"  position="bottom">
+    <van-picker
+        show-toolbar
+        title="选择设备"
+        columns="{{ delDeviceList }}"
+        bind:cancel="onCancelDel"
+        bind:confirm="onConfirmDel"
+    />
+</van-popup>
+
+<van-popup show="{{ showAddDevice }}" bind:close="closeAddDevice">
+   <view class="borrow-device">
+        <view class="line">
+            <input
+                value="{{ addDeviceNumber }}"
+                type="text"
+                required
+                label="设备编号"
+                placeholder="请输入设备编号或扫码"
+                bindinput="bindNumber"
+                placeholder-style="color:#666;"
+            />
+            <view bindtap="goScan" class="scan-btn">扫一扫</view>
+        </view>
+        <view class="pop-btn" bindtap="confirmAddDevice">确认</view>
+    </view>
+</van-popup>

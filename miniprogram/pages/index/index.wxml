@@ -69,11 +69,11 @@
                 <image src="" class="line-image"/>
                 <text>设备台账</text>
             </navigator>
-            <navigator class="line-item">
+            <navigator class="line-item" url="/pages/rackAccount/index">
                 <image src="" class="line-image"/>
                 <text>机柜台账</text>
             </navigator>
-            <navigator class="line-item">
+            <navigator class="line-item" url="/pages/rackInfo/index">
                 <image src="" class="line-image"/>
                 <text>机柜信息</text>
             </navigator>

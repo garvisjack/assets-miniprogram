@@ -47,6 +47,11 @@ Page({
           deviceInfo: res.result.deviceInfo.data[0],
           noData: false
         })
+      }else{
+        this.setData({
+          deviceInfo: [],
+          noData: true
+        })
       }
       // 借用人
       if(res.result.deviceUserName.data[0]) {

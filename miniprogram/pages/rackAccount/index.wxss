@@ -1,0 +1,33 @@
+.table {
+    width: 100%;
+    border: 0px solid darkgray;
+  }
+  .tr {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    min-height: 80rpx;
+    align-items: center;
+  }
+  .td {
+    width:40%;
+    justify-content: center;
+    text-align: center;
+    font-size: 24rpx;
+  }
+  .bg-w{
+    background: snow;
+  }
+  .bg-g{
+    background: #f5f5f5;
+  }
+  .th {
+    width: 40%;
+    justify-content: center;
+    background: #074195;
+    color: #fff;
+    display: flex;
+    min-height: 80rpx;
+    align-items: center;
+    font-size: 28rpx;
+  }
