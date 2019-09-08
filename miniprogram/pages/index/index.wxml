@@ -55,7 +55,7 @@
                 <image src="" class="line-image"/>
                 <text>机柜借用</text>
             </navigator>
-            <navigator class="line-item">
+            <navigator class="line-item" url="/pages/rackMove/index">
                 <image src="" class="line-image"/>
                 <text>机柜移动</text>
             </navigator>

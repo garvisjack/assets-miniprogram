@@ -1,0 +1,44 @@
+<view class="container">
+    <view class="borrow-device">
+        <view class="line">
+            <input
+                value="{{ number }}"
+                type="text"
+                required
+                label="机柜编号"
+                placeholder="请输入机柜编号或扫码"
+                bindinput="bindNumber"
+                placeholder-style="color:#666;"
+            />
+            <view bindtap="goScan" class="scan-btn">扫一扫</view>
+        </view>
+        <view class="line">
+            <van-cell title="{{roomText}}" is-link value="" bindtap="chooseRoom" border="{{ false }}"/>
+            <van-popup show="{{ showRoom }}" bind:close="onCloseRoom"  position="bottom">
+                <van-picker
+                    show-toolbar
+                    title="试验室"
+                    columns="{{ roomList }}"
+                    bind:cancel="onCancelPicker"
+                    bind:confirm="onConfirmRoom"
+                />
+            </van-popup>
+        </view>
+        <view class="line">
+            <van-cell title="{{positionText}}" is-link value="" bindtap="choosePosition" border="{{ false }}"/>
+            <van-popup show="{{ showPosition }}" bind:close="onClosePosition"  position="bottom">
+                <van-picker
+                    show-toolbar
+                    title="位置"
+                    columns="{{positionList }}"
+                    bind:cancel="onCancelPicker"
+                    bind:confirm="onConfirmPosition"
+                />
+            </van-popup>
+        </view>
+        <view style="width: 650rpx; padding: 0 10rpx;margin-top:50rpx">
+            <van-button type="primary" bindtap="goConfirm">确认</van-button>
+        </view>
+    </view>
+
+</view>

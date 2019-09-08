@@ -11,7 +11,8 @@
     "pages/rackSend/index",
     "pages/deviceAccount/index",
     "pages/rackAccount/index",
-    "pages/rackInfo/index"
+    "pages/rackInfo/index",
+    "pages/rackMove/index"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
