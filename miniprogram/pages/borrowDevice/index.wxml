@@ -10,7 +10,7 @@
                 bindinput="bindNumber"
                 placeholder-style="color:#666;"
             />
-            <view bindtap="goScan" class="scan-btn">扫一扫</view>
+            <image src="../../images/icons/icon-scancode.png" class="scanCode-image" bindtap="goScan"/>
         </view>
         <view class="line">
             <van-cell title="{{dateText}}" is-link value="" bindtap="chooseDate" border="{{ false }}"/>

@@ -23,15 +23,18 @@ page{
 .deviceInfo-top .top-info .number{
     font-size: 32rpx;
     color: #333;
-    margin-bottom: 20rpx;
+    margin-bottom: 15rpx;
 }
 .deviceInfo-top .top-info .status{
-    font-size: 28rpx;
+    font-size: 32rpx;
     color: #333;
     margin-bottom: 15rpx;
 }
 .deviceInfo-top .top-info .status:last-child{
     margin-bottom: 0;
+}
+.deviceInfo-top .top-info .status .label{
+    text-decoration:underline;color:#074195
 }
 .deviceInfo-bottom{
     width: 100%;

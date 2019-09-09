@@ -12,7 +12,8 @@
     "pages/deviceAccount/index",
     "pages/rackAccount/index",
     "pages/rackInfo/index",
-    "pages/rackMove/index"
+    "pages/rackMove/index",
+    "pages/rackPosition/index"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

@@ -12,8 +12,8 @@
     <view class="rack-info" wx:if="{{!noData}}">
         <view class="send-box" wx:if="{{rackInfo.com}}">
             <view class="status">
-                <van-button wx:if="{{rackInfo.com.length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.com}}" data-part="com">移除</van-button>
-                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.com}}" data-part="com">增加</van-button>
+                <van-button wx:if="{{rackInfo.com.length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.com}}" data-part="com" plain>-</van-button>
+                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.com}}" data-part="com" plain>+</van-button>
             </view>
             <van-panel use-footer-slot>
                 <view class="device-info">
@@ -27,8 +27,8 @@
 
         <view class="send-box" wx:if="{{rackInfo.power}}">
             <view class="status">
-                <van-button wx:if="{{rackInfo.power.length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.power}}" data-part="power">移除</van-button>
-                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.power}}" data-part="power">增加</van-button>
+                <van-button wx:if="{{rackInfo.power.length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.power}}" data-part="power" plain>-</van-button>
+                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.power}}" data-part="power" plain>+</van-button>
             </view>
             <van-panel use-footer-slot>
                 <view class="device-info">
@@ -42,8 +42,8 @@
 
         <view class="send-box" wx:if="{{rackInfo['34970']}}">
             <view class="status">
-                <van-button wx:if="{{rackInfo['34970'].length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo['34970']}}" data-part="34970">移除</van-button>
-                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo['34970']}}" data-part="34970">增加</van-button>
+                <van-button wx:if="{{rackInfo['34970'].length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo['34970']}}" data-part="34970" plain>-</van-button>
+                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo['34970']}}" data-part="34970" plain>+</van-button>
             </view>
             <van-panel use-footer-slot>
                 <view class="device-info">
@@ -57,8 +57,8 @@
 
         <view class="send-box" wx:if="{{rackInfo['34901']}}">
             <view class="status">
-                <van-button wx:if="{{rackInfo['34901'].length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo['34901']}}" data-part="34901">移除</van-button>
-                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo['34901']}}" data-part="34901">增加</van-button>
+                <van-button wx:if="{{rackInfo['34901'].length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo['34901']}}" data-part="34901" plain>-</van-button>
+                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo['34901']}}" data-part="34901" plain>+</van-button>
             </view>
             <van-panel use-footer-slot>
                 <view class="device-info">
@@ -72,8 +72,8 @@
 
         <view class="send-box" wx:if="{{rackInfo.other}}">
             <view class="status">
-                <van-button wx:if="{{rackInfo.other.length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.other}}" data-part="other">移除</van-button>
-                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.other}}" data-part="other">增加</van-button>
+                <van-button wx:if="{{rackInfo.other.length}}" size="small" type="danger" bindtap="delDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.other}}" data-part="other" plain>-</van-button>
+                <van-button size="small" type="primary" bindtap="addDevice" data-id="{{rackInfo._id}}" data-list="{{rackInfo.other}}" data-part="other" plain>+</van-button>
             </view>
             <van-panel use-footer-slot>
                 <view class="device-info">
@@ -115,7 +115,7 @@
                 bindinput="bindNumber"
                 placeholder-style="color:#666;"
             />
-            <view bindtap="goScan" class="scan-btn">扫一扫</view>
+            <image src="../../images/icons/icon-scancode.png" class="scanCode-image" bindtap="goScan"/>
         </view>
         <view class="pop-btn" bindtap="confirmAddDevice">确认</view>
     </view>

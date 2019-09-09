@@ -59,7 +59,7 @@
                 <image src="" class="line-image"/>
                 <text>机柜移动</text>
             </navigator>
-            <navigator class="line-item">
+            <navigator class="line-item" url="/pages/rackPosition/index">
                 <image src="" class="line-image"/>
                 <text>机柜位置</text>
             </navigator>

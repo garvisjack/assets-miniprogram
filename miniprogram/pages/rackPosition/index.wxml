@@ -1,0 +1,55 @@
+<view class="container">
+    <view class="home-search">
+        <van-search 
+            value="{{ searchValue }}"
+            placeholder="请输入机柜编号"
+            bind:search="onSearch"
+            bind:cancel="onCancel"
+            maxlength="24"
+        />
+        <image src="../../images/icons/icon-scancode.png" class="scanCode-image" bindtap="scanCode"/>
+    </view>
+</view>
+<view class="rack-position">
+    <van-cell title="机柜位置" icon="location-o"/>
+    <view class="tree-select">
+        <scroll-view scroll-y class="tree-select__nav" style="height: {{ mainHeight }}px">
+            <view
+            wx:for="{{ roomList }}"
+            wx:key="index"
+            class="items {{ mainActiveIndex === index ? 'main-active-class' : '' }}"
+            data-index="{{ index }}"
+            data-item="{{ item }}"
+            bind:tap="onClickNav"
+            >
+            {{ item }}
+            <view class="active-line" wx:if="{{ mainActiveIndex === index}}"></view>
+            </view>
+        </scroll-view>
+        <scroll-view
+            scroll-y
+            class="tree-select__content"
+            style="height: {{ mainHeight }}px"
+        >
+            <view
+                wx:for="{{ positionList }}"
+                wx:key="index"
+                class="items {{ activeId === index ? 'main-active-class' : '' }}"
+                data-item="{{ item.position }}"
+            >
+            <text wx:if="{{ searchValue != '' && searchValue == item.rack_number }}" style="font-weight:bold">{{ item.position }}</text>
+            <text wx:else>{{ item.position }}</text>
+            <van-tag wx:if="{{ item.rack_number && searchValue != item.rack_number}}" plain>{{ item.rack_number }}</van-tag>
+            <van-tag type="primary" wx:if="{{ searchValue != '' && searchValue == item.rack_number }}" plain>{{ item.rack_number }}</van-tag>
+            <van-button type="primary" wx:if="{{ item.rack_number == '' || item.rack_number == null}}" plain>+</van-button>
+            <van-button type="danger" wx:if="{{ item.rack_number}}" plain>-</van-button>
+            <van-icon
+                wx:if="{{ activeId }}"
+                name="checked"
+                size="16px"
+                class="van-tree-select__selected"
+            />
+            </view>
+        </scroll-view>
+    </view>
+</view>

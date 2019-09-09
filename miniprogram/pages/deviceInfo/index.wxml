@@ -6,12 +6,12 @@
         <view class="top-info">
             <view class="number">设备编号：{{number}}</view>
             <view class="status">
-                <van-tag type="success" wx:if="{{deviceUserName}}">借用人：{{deviceUserName}}</van-tag>
-                <van-tag type="success" wx:else>设备借用：暂无</van-tag>
+                <view wx:if="{{deviceUserName}}">借用人：<text class="label">{{deviceUserName}}</text></view>
+                <view wx:else>设备借用：暂无</view>
             </view>
             <view class="status">
-                <van-tag type="primary" wx:if="{{rackNumber}}">借用机柜：{{rackNumber}}</van-tag>
-                <van-tag type="primary" wx:else>机柜借用：暂无</van-tag>
+                <view wx:if="{{rackNumber}}">借用机柜：<text class="label">{{rackNumber}}</text></view>
+                <view wx:else>机柜借用：暂无</view>
             </view>
         </view>
     </view>

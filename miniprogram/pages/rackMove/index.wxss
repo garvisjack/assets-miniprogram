@@ -7,7 +7,7 @@ page{
     background-color: #fff;
     margin: 35% auto;
     margin-bottom: 0;
-    padding: 100rpx 20rpx;
+    padding: 88rpx 20rpx;
     box-shadow: 2rpx 4rpx 2rpx #eee;
     border-radius: 6rpx; 
 }
@@ -15,7 +15,7 @@ page{
     position: relative;
     width: 650rpx;
     padding: 0 10rpx;
-    height: 100rpx;
+    height: 88rpx;
     margin-bottom: 30rpx;
 }
 .borrow-device input{
@@ -23,14 +23,15 @@ page{
     width: 70%;
     font-size: 32rpx;
     color: #333;
-    height: 100rpx;
+    height: 88rpx;
     border: 1px solid #999;
+    padding-left: 15rpx !important;
 }
 
 .borrow-device .scan-btn{
     float: right;
-    height: 100rpx;
-    line-height: 100rpx;
+    height: 88rpx;
+    line-height: 88rpx;
     border-radius: 6rpx;
     padding: 0 25rpx;
     text-align: center;
@@ -48,4 +49,12 @@ page{
 .van-cell{
     padding: 30rpx 0 !important;
     color: #666 !important;
+    padding-left: 15rpx !important;
+}
+.scanCode-image{
+    float: right;
+    height: 60rpx;
+    width: 60rpx;
+    margin-top: 16rpx;
+    margin-right:60rpx;
 }
