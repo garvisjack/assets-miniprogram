@@ -38,6 +38,10 @@ page{
     width: 10rpx;
     background-color: #074195;
 }
+.active-item{
+    font-weight:bold;
+    color: #074195;
+}
 .van-tag{
     font-size: 24rpx !important;
     margin-right: 15rpx;

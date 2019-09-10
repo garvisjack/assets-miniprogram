@@ -5,8 +5,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    searchValue: 'TE0020',
-    number: 'TE0020',
+    searchValue: '',
+    number: '',
     room: '',
     position: '',
     roomList: [],
@@ -27,7 +27,9 @@ Page({
     // 树形结构树准备
     mainActiveIndex: 0,
     activeId: null,
-    mainHeight: 0
+    mainHeight: 0,
+    //用于判断是否有机柜占用位置时
+    hasRack: false
   },
 
   /**
@@ -56,13 +58,138 @@ Page({
 
   // 选择位置，可切换
   onSelectItem(event) {
-    console.log(event)
     this.setData({ activeId: detail.id })
   },
 
-  bindNumber: function(e) {
+  removeRack: function(event) {
     this.setData({
-      number: e.detail.value
+      position: event.currentTarget.dataset.position,
+      number: event.currentTarget.dataset.number
+    })
+    wx.showModal({
+      title: '提示',
+      showCancel: true,
+      content: `将${this.data.number}从该位置移除？`,
+      cancelText: '取消',
+      confirmText: '确认',
+      confirmColor: '#074195',
+      success: res => {
+        if (res.confirm) {
+          this.moveRackToPosition(false)
+        } else if (res.cancel) {
+          
+        }
+      }
+    })
+  },
+
+  moveRack: function(event) {
+    if(this.data.searchValue == '' || this.data.searchValue == null) {
+      wx.showToast({
+        title: '机柜编号不能为空',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+    // 判断该位置尚未移除的情况，提示去移除
+    console.log(this.data.hasRack)
+    if(this.data.hasRack) {
+      wx.showToast({
+        title: `${this.data.searchValue}在${this.data.room}${this.data.position}，请移除后再操作`,
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+    this.setData({
+      position: event.currentTarget.dataset.position
+    })
+    wx.showModal({
+      title: '提示',
+      showCancel: true,
+      content: `将${this.data.searchValue}移动到该位置？`,
+      cancelText: '取消',
+      confirmText: '确认',
+      confirmColor: '#074195',
+      success: res => {
+        if (res.confirm) {
+          this.moveRackToPosition()
+        } else if (res.cancel) {
+          
+        }
+      }
+    })
+
+  },
+
+  // 移动机柜到新位置
+  moveRackToPosition: function(flag = true) {
+    let nowDate = new Date().getTime()
+    let dateTime = this.formatTime(nowDate, 'Y/M/D h:m:s')
+
+    // 移除操作
+    let options
+    if(!flag) {
+      options = {
+        username: this.data.userInfo.name,
+        userId: this.data.userInfo._id,
+        number: '',
+        room: this.data.room,
+        position: this.data.position,
+        dateTime: dateTime,
+        status: 0
+      }
+    }else{
+      options = {
+        username: this.data.userInfo.name,
+        userId: this.data.userInfo._id,
+        number: this.data.searchValue,
+        room: this.data.room,
+        position: this.data.position,
+        dateTime: dateTime,
+        status: 1
+      }
+    }
+
+    wx.showLoading()
+    wx.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'moveRack',
+      // 传递给云函数的event参数
+      data: options
+    }).then(res => {
+      if(res.result == 'exist') {
+        wx.showToast({
+          title: '操作失败，位置已被占用',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
+      if(res.result.moveRack.stats.updated == 1) {
+        this.getRackPosition()
+        wx.showToast({
+          title: '操作成功',
+          icon: 'none',
+          duration: 2000
+        })
+      }else{
+        wx.showToast({
+          title: '操作失败，请重试',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+      wx.hideLoading()
+     
+    }).catch(err => {
+      wx.hideLoading()
+      wx.showToast({
+        title: '操作失败，请重试',
+        icon: 'none',
+        duration: 2000
+      })
     })
   },
 
@@ -85,7 +212,15 @@ Page({
     this.setData({
       searchValue: e.detail
     })
+    // 匹配搜索
+    this.getRackPosition()
  
+  },
+
+  onChangeSearch: function(e) {
+    this.setData({
+      searchValue: e.detail
+    })
   },
 
   onCancel: function() {
@@ -109,7 +244,7 @@ Page({
       if(res.result.allPosition.length) {
         this.setData({
           allPosition: res.result.allPosition,
-          noData: false,
+          noData: false
         })
         this.getRoomList(res.result.allPosition)
       }else{
@@ -148,10 +283,36 @@ Page({
       roomList: this.unique(roomList),
       allPositionList: allPositionList
     })
-    // 展示位置列表默认第一个
-    this.setData({
-      room: this.data.roomList[0]
-    })
+    // 若没有搜索内容，则展示位置列表默认第一个
+    if(this.data.searchValue == '') {
+      this.setData({
+        room: this.data.roomList[0],
+        mainActiveIndex: 0
+      })
+    }else{
+      // 若有搜索内容，判断有无搜索结果
+      for(let items of allPositionList) {
+        if(items.rack_number == this.data.searchValue) {
+          for(let i =0;i < this.data.roomList.length;i++) {
+            if(items.room == this.data.roomList[i]) {
+              this.setData({
+                room: items.room,
+                position: items.position,
+                mainActiveIndex: i,
+                hasRack: true
+              })
+            }
+          }
+        }
+      }
+      if(!this.data.hasRack) {
+        wx.showToast({
+          title: '未找到相应机柜',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    }
     this.getPositionList()
 
   },
@@ -197,97 +358,6 @@ Page({
       position: value,
       positionText: value,
       showPosition: false
-    })
-  },
-
-  goConfirm: function () {
-    if(this.data.number == '') {
-      wx.showToast({
-        title: '机柜编号不能为空',
-        icon: 'none',
-        duration: 2000
-      })
-      return
-    }
-    if(this.data.room == ''){
-      wx.showToast({
-        title: '试验室不能为空',
-        icon: 'none',
-        duration: 2000
-      })
-      return
-    }
-    if(this.data.position == ''){
-      wx.showToast({
-        title: '位置不能为空',
-        icon: 'none',
-        duration: 2000
-      })
-      return
-    }
-
-    let nowDate = new Date().getTime()
-    let dateTime = this.formatTime(nowDate, 'Y/M/D h:m:s')
-
-    let options = {
-      username: this.data.userInfo.name,
-      userId: this.data.userInfo._id,
-      number: this.data.number,
-      room: this.data.room,
-      position: this.data.position,
-      dateTime: dateTime
-    }
-    wx.showLoading({
-      title: '移动中..',
-    })
-    wx.cloud.callFunction({
-      // 要调用的云函数名称
-      name: 'moveRack',
-      // 传递给云函数的event参数
-      data: options
-    }).then(res => {
-      if(res.result == 'exist') {
-        wx.showToast({
-          title: '移动失败，位置已被占用',
-          icon: 'none',
-          duration: 2000
-        })
-        return
-      }
-      if(res.result.moveRack.stats.updated == 1) {
-        wx.showModal({
-          title: '提示',
-          showCancel: true,
-          content: '移动成功！',
-          cancelText: '继续',
-          confirmText: '查看机柜',
-          confirmColor: '#074195',
-          success (res) {
-            if (res.confirm) {
-              wx.navigateTo({
-                url: '/pages/rackSend/index'
-              })
-            } else if (res.cancel) {
-              
-            }
-          }
-        })
-      }else{
-        wx.showToast({
-          title: '移动失败，请重试',
-          icon: 'none',
-          duration: 2000
-        })
-      }
-      wx.hideLoading()
-     
-    }).catch(err => {
-      wx.hideLoading()
-      wx.showToast({
-        title: '移动失败，请重试',
-        icon: 'none',
-        duration: 2000
-      })
     })
   },
 

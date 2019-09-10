@@ -4,6 +4,7 @@
             value="{{ searchValue }}"
             placeholder="请输入机柜编号"
             bind:search="onSearch"
+            bind:change="onChangeSearch"
             bind:cancel="onCancel"
             maxlength="24"
         />
@@ -12,7 +13,7 @@
 </view>
 <view class="rack-position">
     <van-cell title="机柜位置" icon="location-o"/>
-    <view class="tree-select">
+    <view class="tree-select" wx:if="{{!noData}}">
         <scroll-view scroll-y class="tree-select__nav" style="height: {{ mainHeight }}px">
             <view
             wx:for="{{ roomList }}"
@@ -37,12 +38,13 @@
                 class="items {{ activeId === index ? 'main-active-class' : '' }}"
                 data-item="{{ item.position }}"
             >
-            <text wx:if="{{ searchValue != '' && searchValue == item.rack_number }}" style="font-weight:bold">{{ item.position }}</text>
+            <!--显示逻辑-->
+            <text wx:if="{{ searchValue != '' && searchValue == item.rack_number }}" class="active-item">{{ item.position }}</text>
             <text wx:else>{{ item.position }}</text>
             <van-tag wx:if="{{ item.rack_number && searchValue != item.rack_number}}" plain>{{ item.rack_number }}</van-tag>
             <van-tag type="primary" wx:if="{{ searchValue != '' && searchValue == item.rack_number }}" plain>{{ item.rack_number }}</van-tag>
-            <van-button type="primary" wx:if="{{ item.rack_number == '' || item.rack_number == null}}" plain>+</van-button>
-            <van-button type="danger" wx:if="{{ item.rack_number}}" plain>-</van-button>
+            <van-button type="primary" wx:if="{{ item.rack_number == '' || item.rack_number == null}}" plain bindtap="moveRack" data-position="{{ item.position }}">+</van-button>
+            <van-button type="danger" wx:if="{{ item.rack_number}}" plain bindtap="removeRack" data-position="{{ item.position }}" data-number="{{ item.rack_number }}">-</van-button>
             <van-icon
                 wx:if="{{ activeId }}"
                 name="checked"
@@ -52,4 +54,9 @@
             </view>
         </scroll-view>
     </view>
+</view>
+
+<view class="empty-data" wx:if="{{noData && !loading}}">
+    <image src="../../images/icons/icon-nodata.png"></image>
+    <text>暂无数据</text>
 </view>

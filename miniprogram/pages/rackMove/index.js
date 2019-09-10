@@ -180,7 +180,8 @@ Page({
       number: this.data.number,
       room: this.data.room,
       position: this.data.position,
-      dateTime: dateTime
+      dateTime: dateTime,
+      status: 1
     }
     wx.showLoading({
       title: '移动中..',
