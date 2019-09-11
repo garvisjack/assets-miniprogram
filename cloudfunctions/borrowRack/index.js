@@ -23,6 +23,7 @@ exports.main = async (event, context) => {
         expect_return_time: event.dateTime,
         real_return_time: '',
         send_status: 1,
+        status_name: '借用中',
         project: event.project,
         send_time: event.sendTime,
         user_name: event.username,

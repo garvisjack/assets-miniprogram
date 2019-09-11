@@ -1,0 +1,80 @@
+<!--miniprogram/pages/deviceInfo/index.wxml-->
+<view class="container">
+    <view class="home-search">
+        <van-search 
+            value="{{ number }}"
+            placeholder="请输入设备编号"
+            bind:search="onSearch"
+            bind:cancel="onCancel"
+            maxlength="24"
+        />
+        <image src="../../images/icons/icon-scancode.png" class="scanCode-image" bindtap="scanCode"/>
+    </view>
+</view>
+<view class="container" wx:if="{{!noData}}">
+    <view class="deviceInfo-top">
+        <image src="{{deviceInfo.img_url}}" wx:if="{{deviceInfo.img_url}}"/>
+        <image src="../../images/device/device_demo.jpg" wx:else/>
+        <view class="top-info">
+            <view class="number">设备编号：{{number}}</view>
+            <view class="status">
+                <view wx:if="{{deviceUserName}}">借用人：<text class="label">{{deviceUserName}}</text></view>
+                <view wx:else>设备借用：正常</view>
+            </view>
+            <view class="status">
+                <view wx:if="{{rackNumber}}">借用机柜：<text class="label">{{rackNumber}}</text></view>
+                <view wx:else>机柜借用：正常</view>
+            </view>
+            <view class="device-status">
+                <van-tag type="success" wx:if="{{deviceInfo.status == 0}}" plain>{{deviceInfo.status_name}}</van-tag>
+                <van-tag type="danger" wx:if="{{deviceInfo.status == 1}}" plain>{{deviceInfo.status_name}}</van-tag>
+                <van-tag type="warning" wx:if="{{deviceInfo.status == 2}}" plain>{{deviceInfo.status_name}}</van-tag>
+                <van-tag wx:if="{{deviceInfo.status == 3}}" plain>{{deviceInfo.status_name}}</van-tag>
+            </view>
+        </view>
+    </view>
+    <view class="deviceInfo-bottom">
+        <van-cell title="状态变更" icon="edit" />
+        <van-cell-group>
+            <van-cell title="{{statusText}}" is-link bindtap="selectStatus"/>
+            <van-field
+                value="{{ reason }}"
+                label="变更原因"
+                type="textarea"
+                placeholder="请输入变更原因"
+                autosize
+                bind:input="onReason"
+                border="{{ false }}"
+            />
+        </van-cell-group>
+    </view>
+    <view class="confirm-btn">
+        <van-button type="primary" bindtap="updateDeviceStatus">修改</van-button>
+    </view>
+
+    <!-- <view class="deviceInfo-bottom">
+        <van-cell-group>
+            <van-cell title="类别" value="{{deviceInfo.cate}}"/>
+            <van-cell title="中文名称" value="{{deviceInfo.name}}"/>
+            <van-cell title="英文名称" value="{{deviceInfo.en_name}}"/>
+            <van-cell title="品牌" value="{{deviceInfo.brand}}"/>
+            <van-cell title="型号" value="{{deviceInfo.model}}"/>
+            <van-cell title="序列号" value="{{deviceInfo.serial_number}}"/>
+            <van-cell title="接收日期" value="{{deviceInfo.receive_time}}"/>
+            <van-cell title="历史信息" is-link value="" arrow-direction="down" />
+        </van-cell-group>
+    </view> -->
+</view>
+<view class="empty-data" wx:if="{{noData && !loading}}">
+    <image src="../../images/icons/icon-nodata.png"></image>
+    <text>暂无数据</text>
+</view>
+<van-popup show="{{ showPicker }}" bind:close="onClose"  position="bottom">
+    <van-picker
+        show-toolbar
+        title="设备状态"
+        columns="{{ statusList }}"
+        bind:cancel="onCancelDel"
+        bind:confirm="onConfirmDel"
+    />
+</van-popup>

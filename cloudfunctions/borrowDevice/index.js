@@ -30,8 +30,9 @@ exports.main = async (event, context) => {
       data: {
         device_number: event.number,
         expect_return_time: event.dateTime,
-        real_return_time: '',
+        real_return_time: event.realReturnTime,
         send_status: 1,
+        status_name: '借用',
         send_time: event.sendTime,
         user_name: event.username,
         user_id: event.userId

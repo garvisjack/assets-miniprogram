@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    searchValue: 'TE0020',
+    searchValue: 'TF0001',
     // 机柜信息
     rackInfo: '',
     // 移除的设备

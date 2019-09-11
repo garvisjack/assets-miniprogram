@@ -70,7 +70,8 @@ exports.main = async (event, context) => {
         change_time: event.dateTime,
         user_name: event.username,
         user_id: event.userId,
-        status: 1
+        status: 1,
+        status_name: '增加'
       }
     })
     return {

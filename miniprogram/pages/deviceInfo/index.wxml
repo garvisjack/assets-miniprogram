@@ -7,11 +7,11 @@
             <view class="number">设备编号：{{number}}</view>
             <view class="status">
                 <view wx:if="{{deviceUserName}}">借用人：<text class="label">{{deviceUserName}}</text></view>
-                <view wx:else>设备借用：暂无</view>
+                <view wx:else>设备借用：正常</view>
             </view>
             <view class="status">
                 <view wx:if="{{rackNumber}}">借用机柜：<text class="label">{{rackNumber}}</text></view>
-                <view wx:else>机柜借用：暂无</view>
+                <view wx:else>机柜借用：正常</view>
             </view>
         </view>
     </view>
@@ -24,7 +24,15 @@
             <van-cell title="型号" value="{{deviceInfo.model}}"/>
             <van-cell title="序列号" value="{{deviceInfo.serial_number}}"/>
             <van-cell title="接收日期" value="{{deviceInfo.receive_time}}"/>
-            <van-cell title="历史信息" is-link value="" arrow-direction="down" />
+            <van-cell title="历史信息" is-link value="" arrow-direction="down" bindtap="showHistory"/>
+            <view class="device-history" wx:if="{{showHistory}}">
+                <van-steps
+                    steps="{{ historyList }}"
+                    active="{{ active }}"
+                    direction="vertical"
+                    active-color="#074195"
+                    />
+            </view>
         </van-cell-group>
     </view>
 </view>

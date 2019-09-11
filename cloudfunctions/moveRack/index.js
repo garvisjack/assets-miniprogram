@@ -36,7 +36,8 @@ exports.main = async (event, context) => {
         user_name: event.username,
         room: event.room,
         position: event.position,
-        status: event.status
+        status: event.status,
+        status_name: event.statusName
       }
     })
     

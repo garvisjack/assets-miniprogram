@@ -97,7 +97,8 @@ Page({
       userId: this.data.userInfo._id,
       number: this.data.number,
       dateTime: this.data.dateTime,
-      sendTime: sendTime
+      sendTime: sendTime,
+      realReturnTime: ''
     }
     wx.showLoading({
       title: '借用中..',

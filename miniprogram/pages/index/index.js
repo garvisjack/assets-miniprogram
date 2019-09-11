@@ -16,14 +16,26 @@ Page({
     indicatorActiveColor: '#074195',
     duration: 1000,
     // 机柜和设备信息
-    rackNum: 20,
-    rackExpiredNum: 2,
-    deviceNum: 20,
-    deviceExpiredNum: 2,
+    userInfo: '',
+    deviceSend: [],
+    rackSend: [],
+    rackNum: 0,
+    rackExpiredNum: 0,
+    deviceNum: 0,
+    deviceExpiredNum: 0,
+    curPage: 1,
+    pageSize: 10
   },
 
   onLoad: function() {
+    if(wx.getStorageSync('userInfo')) {
+      let userInfo = JSON.parse(wx.getStorageSync('userInfo'));
+      this.setData({
+        userInfo: userInfo
+      })
+    }
     this.getBannerList()
+    this.getHomeData()
   },
 
   // 开始搜索
@@ -56,6 +68,84 @@ Page({
         })
       }
     })
+  },
+
+  // 首页设备和机柜数量展示
+  getHomeData: function() {
+    wx.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'getHomeData',
+      // 传递给云函数的event参数
+      data: {
+        pageIndex: this.data.curPage,
+        pageSize: this.data.pageSize,
+        filter: {user_id: this.data.userInfo._id,send_status: 1}
+      }
+    }).then(res => {
+      console.log(res.result)
+      // 基础信息
+      if(res.result.allDeviceSend[0].data) {
+        this.setData({
+          deviceSend: res.result.allDeviceSend[0].data,
+          deviceNum: res.result.total
+        })
+        // 找出借用中，超过归还时间的过期设备
+        let num = 0
+        for(let item of this.data.deviceSend) {
+          if(this.checkDate(item.expect_return_time)) {
+
+          }else{
+            num++
+          }
+        }
+        this.setData({
+          deviceExpiredNum: num
+        })
+      }else{
+        this.setData({
+          deviceSend: []
+        })
+      }
+      // 机柜借用数量
+      if(res.result.allRackSend[0].data) {
+        this.setData({
+          rackSend: res.result.allRackSend[0].data,
+          rackNum: res.result.rackTotal
+        })
+        // 找出借用中，超过归还时间的过期设备
+        let rackNum = 0
+        for(let val of this.data.rackSend) {
+          if(this.checkDate(val.expect_return_time)) {
+
+          }else{
+            rackNum++
+          }
+        }
+        this.setData({
+          rackExpiredNum: rackNum
+        })
+      }else{
+        this.setData({
+          rackSend: []
+        })
+      }
+
+    }).catch(err => {
+      wx.hideLoading()
+      this.setData({
+        loading: false
+      })
+    })
+  },
+
+  checkDate: function(date2) {
+    let oDate1 = new Date();
+    let oDate2 = new Date(date2);
+    if (oDate1.getTime() >= oDate2.getTime()) {
+        return false;
+    } else {
+        return true;
+    }
   },
 
   // 扫码编号

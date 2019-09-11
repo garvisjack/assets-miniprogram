@@ -51,7 +51,8 @@ exports.main = async (event, context) => {
       change_time: event.dateTime,
       user_name: event.username,
       user_id: event.userId,
-      status: 0
+      status: 0,
+      status_name: '移除'
     }
   })
 

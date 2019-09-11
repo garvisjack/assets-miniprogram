@@ -17,10 +17,6 @@ exports.main = async (event, context) => {
 
   const deviceSend =  await db.collection('device_send').where(filter).skip((pageIndex - 1) * pageSize).limit(pageSize).orderBy('send_time', 'desc').get()
 
-  for(let item of deviceSend.data) {
-    const deviceName = await db.collection('device_list').where({number: item.device_number}).get()
-    item.device_name = deviceName.data[0].name
-  }
   return {
     deviceSend
   }

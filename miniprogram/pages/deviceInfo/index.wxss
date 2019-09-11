@@ -19,6 +19,7 @@ page{
 .deviceInfo-top .top-info{
     float: left;
     margin-left: 60rpx;
+    margin-top:12rpx;
 }
 .deviceInfo-top .top-info .number{
     font-size: 32rpx;
@@ -40,4 +41,6 @@ page{
     width: 100%;
     background-color: #fff;
 }
-
+.device-history{
+    padding-bottom: 50rpx;
+}

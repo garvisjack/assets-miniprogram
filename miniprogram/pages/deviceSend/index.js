@@ -66,6 +66,7 @@ Page({
               realReturnTime: that.formatTime(nowDate, 'Y/M/D h:m:s')
             }
           }).then(res => {
+            console.log(res)
             if(res.result.returnDevice.stats.updated == 1) {
               that.resetPage();
               that.onLoad();
@@ -98,6 +99,10 @@ Page({
     })
   },  
 
+  getAllDevice: function(number) {
+    
+  },
+
   getDeviceSend: function() {
     wx.showLoading()
     wx.cloud.callFunction({
@@ -112,11 +117,12 @@ Page({
     }).then(res => {
       // 获取设备借用表中数据
       if(res.result.deviceSend.data.length) {
+        // 连表查询设备名称
+        let result = res.result.deviceSend.data
         this.setData({
-          deviceList: this.data.deviceList.concat(res.result.deviceSend.data),
+          deviceList: this.data.deviceList.concat(result),
           noData: false
         })
-        console.log(this.data.deviceList)
       }else{
         if(this.data.deviceList.length == 0) {
           this.setData({
@@ -130,6 +136,7 @@ Page({
       wx.hideLoading()
     
     }).catch(err => {
+      console.error(err)
       wx.hideLoading()
       wx.showToast({
         title: '获取数据失败，请重试',

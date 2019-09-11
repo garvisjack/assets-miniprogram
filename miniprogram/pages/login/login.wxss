@@ -4,7 +4,7 @@ page{
 }
 .login-box{
     width: 80%;
-    margin: 48% 10%;
+    margin: 50% 10%;
 }
 .login-box .field{
     margin-bottom: 40rpx;

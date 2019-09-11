@@ -27,7 +27,7 @@
             <navigator class="line-item" url="/pages/rackSend/index">
                 <text>机柜借用数量</text>
                 <view class="item-num">
-                    <text>{{rackNum}} (<text class="expired-num">{{rackExpiredNum}}</text>)</text>
+                    <text>{{rackNum}} <text class="expired-num" wx:if="{{rackExpiredNum}}">({{rackExpiredNum}})</text></text>
                 </view>
             </navigator>
         </view>
@@ -35,7 +35,7 @@
             <navigator class="line-item" url="/pages/deviceSend/index">
                 <text>设备借用数量</text>
                 <view class="item-num">
-                    <text>{{deviceNum}} (<text class="expired-num">{{deviceExpiredNum}}</text>)</text>
+                    <text>{{deviceNum}} <text class="expired-num" wx:if="{{deviceExpiredNum}}">({{deviceExpiredNum}})</text></text>
                 </view>
             </navigator>
         </view>
@@ -77,7 +77,7 @@
                 <image src="" class="line-image"/>
                 <text>机柜信息</text>
             </navigator>
-            <navigator class="line-item">
+            <navigator class="line-item" url="/pages/deviceChange/index">
                 <image src="" class="line-image"/>
                 <text>状态变更</text>
             </navigator>
