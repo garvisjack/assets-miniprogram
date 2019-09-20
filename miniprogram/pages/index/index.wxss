@@ -100,7 +100,6 @@ page {
   margin: 20rpx auto;
   width: 80rpx;
   height: 80rpx;
-  border: 1px solid #ccc;
 }
 .home-box .line-item text{
   display: block;

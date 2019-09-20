@@ -6,12 +6,10 @@
         <view class="top-info">
             <view class="number">设备编号：{{number}}</view>
             <view class="status">
-                <view wx:if="{{deviceUserName}}">借用人：<text class="label">{{deviceUserName}}</text></view>
-                <view wx:else>设备借用：正常</view>
-            </view>
-            <view class="status">
-                <view wx:if="{{rackNumber}}">借用机柜：<text class="label">{{rackNumber}}</text></view>
-                <view wx:else>机柜借用：正常</view>
+                <view wx:if="{{rackNumber && deviceUserName}}">设备位置：<text class="label">{{deviceUserName}}{{rackNumber}}</text></view>
+                <view wx:if="{{rackNumber}}">设备位置：<text class="label">机柜{{rackNumber}}</text></view>
+                <view wx:if="{{deviceUserName}}">设备位置：<text class="label">{{deviceUserName}}借用中</text></view>
+                <view wx:if="{{!rackNumber && !deviceUserName}}">设备位置：<text class="label">{{deviceInfo.first_location}}</text></view>
             </view>
         </view>
     </view>
@@ -24,6 +22,9 @@
             <van-cell title="型号" value="{{deviceInfo.model}}"/>
             <van-cell title="序列号" value="{{deviceInfo.serial_number}}"/>
             <van-cell title="接收日期" value="{{deviceInfo.receive_time}}"/>
+            <van-cell title="上次校准日期" value="{{deviceInfo.current_cal}}"/>
+            <van-cell title="下次校准日期" value="{{deviceInfo.next_cal}}"/>
+            <van-cell title="备注" value="{{deviceInfo.remark}}"/>
             <van-cell title="历史信息" is-link value="" arrow-direction="down" bindtap="showHistory"/>
             <view class="device-history" wx:if="{{showHistory}}">
                 <van-steps

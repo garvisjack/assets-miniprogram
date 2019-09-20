@@ -44,7 +44,6 @@ Page({
         number: this.data.number
       }
     }).then(res => {
-      console.log(res)
       // 基础信息
       if(res.result.deviceInfo.data[0]) {
         this.setData({
@@ -102,20 +101,21 @@ Page({
           filter: {device_number: this.data.number}
         }
       }).then(res => {
-        console.log(res.result)
         // 设备历史
-        if(res.result.allDeviceChange[0].data) {
+        if(res.result.allDeviceChange.length) {
           this.setData({
             deviceSendHistory: res.result.allDeviceChange[0].data
           })
         }
-        // 设备和机柜历史
-        if(res.result.allRackChange[0].data) {
+        // // 设备和机柜历史
+        if(res.result.allRackChange.length) {
           this.setData({
             rackSendHistory: res.result.allRackChange[0].data
           })
         }
+  
         let steps = this.data.deviceSendHistory.concat(this.data.rackSendHistory)
+ 
         // 处理历史记录数组
         for(let item of steps) {
           if(item.send_time) {
@@ -137,9 +137,17 @@ Page({
             }
           }
         }
-        this.setData({
-          historyList: steps
-        })
+        if(steps.length) {
+          this.setData({
+            historyList: steps
+          })
+        }else{
+          wx.showToast({
+            title: '暂无历史信息',
+            icon: 'none',
+            duration: 2000
+          })
+        }
         wx.hideLoading()
   
       }).catch(err => {
