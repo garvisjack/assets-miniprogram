@@ -1,7 +1,9 @@
 <view class="container" wx:if="{{!noData}}">
     <block wx:for="{{rackList}}" wx:key="{{index}}">
         <view class="send-box" wx:if="{{item.send_status == 1}}">
-            <view class="status">借用中</view>
+            <view class="status">借用中 
+                <text style="color:red" wx:if="{{item.expired == 1}}">(逾期)</text>
+            </view>
             <van-panel use-footer-slot>
                 <view class="device-info">
                     <text data-number="{{item.rack_number}}" style="text-decoration:underline;color:#074195" bindtap="goRackInfo">机柜编号：{{item.rack_number}}</text>
@@ -15,7 +17,7 @@
                 </view>
             </van-panel>
         </view>
-        <view class="send-box" wx:else>
+        <!-- <view class="send-box" wx:else>
             <view class="status disabled">已归还</view>
             <van-panel use-footer-slot header-class="disabled">
                 <view class="device-info">
@@ -29,7 +31,7 @@
                     <van-button size="small" type="primary" plain data-number="{{item.rack_number}}" bindtap="goBorrowRack">去借用</van-button>
                 </view>
             </van-panel>
-        </view>
+        </view> -->
     </block>
 </view>
 <view class="empty-data" wx:if="{{noData && !loading}}">

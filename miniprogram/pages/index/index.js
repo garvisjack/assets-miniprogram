@@ -72,6 +72,7 @@ Page({
 
   // 首页设备和机柜数量展示
   getHomeData: function() {
+    wx.showLoading()
     wx.cloud.callFunction({
       // 要调用的云函数名称
       name: 'getHomeData',
@@ -129,6 +130,7 @@ Page({
           rackSend: []
         })
       }
+      wx.hideLoading()
 
     }).catch(err => {
       wx.hideLoading()
@@ -165,6 +167,16 @@ Page({
         wx.hideLoading()
       }
     })
+  },
+
+  
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+    this.getBannerList()
+    this.getHomeData()
+    wx.stopPullDownRefresh()
   }
   
 })

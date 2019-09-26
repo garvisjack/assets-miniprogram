@@ -2,5 +2,6 @@
   "usingComponents": {
    
   },
-  "navigationBarTitleText": "设备台账"
+  "navigationBarTitleText": "设备台账",
+  "enablePullDownRefresh": true
 }

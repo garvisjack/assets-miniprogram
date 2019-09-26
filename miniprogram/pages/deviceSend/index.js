@@ -119,6 +119,13 @@ Page({
       if(res.result.deviceSend.data.length) {
         // 连表查询设备名称
         let result = res.result.deviceSend.data
+        for(let val of result) {
+          if(this.checkDate(val.expect_return_time)) {
+            val.expired = 0
+          }else{
+            val.expired = 1
+          }
+        }
         this.setData({
           deviceList: this.data.deviceList.concat(result),
           noData: false
@@ -147,6 +154,17 @@ Page({
         loading: false
       })
     })
+  },
+
+  
+  checkDate: function(date2) {
+    let oDate1 = new Date();
+    let oDate2 = new Date(date2);
+    if (oDate1.getTime() >= oDate2.getTime()) {
+        return false;
+    } else {
+        return true;
+    }
   },
 
   formatTime: function(number, format) {

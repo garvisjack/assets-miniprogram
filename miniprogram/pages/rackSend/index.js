@@ -112,11 +112,18 @@ Page({
     }).then(res => {
       // 获取设备借用表中数据
       if(res.result.rackSend.data.length) {
+        let result = res.result.rackSend.data
+        for(let val of result) {
+          if(this.checkDate(val.expect_return_time)) {
+            val.expired = 0
+          }else{
+            val.expired = 1
+          }
+        }
         this.setData({
-          rackList: this.data.rackList.concat(res.result.rackSend.data),
+          rackList: this.data.rackList.concat(result),
           noData: false
         })
-        console.log(this.data.rackList)
       }else{
         if(this.data.rackList.length == 0) {
           this.setData({
@@ -140,6 +147,16 @@ Page({
         loading: false
       })
     })
+  },
+
+  checkDate: function(date2) {
+    let oDate1 = new Date();
+    let oDate2 = new Date(date2);
+    if (oDate1.getTime() >= oDate2.getTime()) {
+        return false;
+    } else {
+        return true;
+    }
   },
 
   formatTime: function(number, format) {

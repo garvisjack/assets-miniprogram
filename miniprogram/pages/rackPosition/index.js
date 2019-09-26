@@ -29,7 +29,12 @@ Page({
     activeId: null,
     mainHeight: 0,
     //用于判断是否有机柜占用位置时
-    hasRack: false
+    hasRack: false,
+    // 移除的设备
+    delRackList: [],
+    delRack: '',
+    delPosition: '',
+    showPicker: false
   },
 
   /**
@@ -291,25 +296,34 @@ Page({
       })
     }else{
       // 若有搜索内容，判断有无搜索结果
+      console.log(allPositionList)
       for(let items of allPositionList) {
-        if(items.rack_number == this.data.searchValue) {
+        if(items.rack_number.indexOf(this.data.searchValue) > -1) {
+          console.log(items.rack_number)
+          console.log(this.data.searchValue)
           for(let i =0;i < this.data.roomList.length;i++) {
             if(items.room == this.data.roomList[i]) {
               this.setData({
                 room: items.room,
                 position: items.position,
-                mainActiveIndex: i,
-                hasRack: true
+                mainActiveIndex: i
               })
             }
           }
+          this.setData({
+            hasRack: true
+          })
         }
       }
+
       if(!this.data.hasRack) {
         wx.showToast({
           title: '未找到相应机柜',
           icon: 'none',
           duration: 2000
+        })
+        this.setData({
+          hasRack: false
         })
       }
     }
@@ -337,6 +351,7 @@ Page({
         }
       }
     }
+    console.log(positionList)
     this.setData({
       positionList: positionList
     })
@@ -358,6 +373,32 @@ Page({
       position: value,
       positionText: value,
       showPosition: false
+    })
+  },
+
+  delRack: function(event) {
+    this.setData({
+      delRackList: event.currentTarget.dataset.number,
+      delPosition: event.currentTarget.dataset.position,
+      showPicker: true
+    })
+  },
+
+  onConfirmDel(event) {
+    const { picker, value, index } = event.detail;
+    this.setData({
+      delRack: value
+    })
+
+    let delResult = this.data.delRackList
+    delResult.splice(index, 1)
+    console.log(delResult)
+  },
+
+  onCancelDel() {
+    this.setData({
+      delRackList: [],
+      showPicker: false
     })
   },
 

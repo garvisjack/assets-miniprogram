@@ -55,9 +55,9 @@
                 <image src="../../images/icons/jgjy.png" class="line-image"/>
                 <text>机柜借用</text>
             </navigator>
-            <navigator class="line-item" url="/pages/rackMove/index">
-                <image src="../../images/icons/jgyd.png" class="line-image"/>
-                <text>机柜移动</text>
+            <navigator class="line-item" url="/pages/rackInfo/index">
+                <image src="../../images/icons/jgxx.png" class="line-image"/>
+                <text>机柜信息</text>
             </navigator>
             <navigator class="line-item" url="/pages/rackPosition/index">
                 <image src="../../images/icons/jgwz.png" class="line-image"/>
@@ -72,14 +72,6 @@
             <navigator class="line-item" url="/pages/rackAccount/index">
                 <image src="../../images/icons/jgtz.png" class="line-image"/>
                 <text>机柜台账</text>
-            </navigator>
-            <navigator class="line-item" url="/pages/rackInfo/index">
-                <image src="../../images/icons/jgxx.png" class="line-image"/>
-                <text>机柜信息</text>
-            </navigator>
-            <navigator class="line-item" url="/pages/deviceChange/index">
-                <image src="../../images/icons/ztbg.png" class="line-image"/>
-                <text>状态变更</text>
             </navigator>
         </view>
     </view>

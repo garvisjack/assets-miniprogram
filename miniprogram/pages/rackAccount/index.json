@@ -2,5 +2,6 @@
   "usingComponents": {
    
   },
-  "navigationBarTitleText": "机柜台账"
+  "navigationBarTitleText": "机柜台账",
+  "enablePullDownRefresh": true
 }

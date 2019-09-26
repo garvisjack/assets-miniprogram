@@ -110,6 +110,14 @@ Page({
       data: options
     }).then(res => {
       console.log(res.result)
+      if(res.result == 'notdevice') {
+        wx.showToast({
+          title: '设备不存在，请重试',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
       if(res.result == 'exist') {
         wx.showToast({
           title: '借用失败，设备已借用',

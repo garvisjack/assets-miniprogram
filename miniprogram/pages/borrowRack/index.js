@@ -125,6 +125,14 @@ Page({
       data: options
     }).then(res => {
       console.log(res)
+      if(res.result == 'notrack') {
+        wx.showToast({
+          title: '机柜不存在，请重试',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
       if(res.result == 'exist') {
         wx.showToast({
           title: '借用失败，机柜已借用',

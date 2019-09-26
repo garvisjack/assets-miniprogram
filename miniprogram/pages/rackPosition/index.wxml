@@ -39,12 +39,17 @@
                 data-item="{{ item.position }}"
             >
             <!--显示逻辑-->
-            <text wx:if="{{ searchValue != '' && searchValue == item.rack_number }}" class="active-item">{{ item.position }}</text>
-            <text wx:else>{{ item.position }}</text>
-            <van-tag wx:if="{{ item.rack_number && searchValue != item.rack_number}}" plain>{{ item.rack_number }}</van-tag>
-            <van-tag type="primary" wx:if="{{ searchValue != '' && searchValue == item.rack_number }}" plain>{{ item.rack_number }}</van-tag>
-            <van-button type="primary" wx:if="{{ item.rack_number == '' || item.rack_number == null}}" plain bindtap="moveRack" data-position="{{ item.position }}">+</van-button>
-            <van-button type="danger" wx:if="{{ item.rack_number}}" plain bindtap="removeRack" data-position="{{ item.position }}" data-number="{{ item.rack_number }}">-</van-button>
+            <!-- <text wx:if="{{ searchValue != '' && searchValue == item.rack_number }}" class="active-item">{{ item.position }}</text> -->
+            <text>{{ item.position }}</text>
+            <view wx:if="{{ item.rack_number }}" wx:for="{{ item.rack_number }}" wx:key="idx" wx:for-index="idx" wx:for-item="value">
+                <text class="p-rack active-item" wx:if="{{ searchValue != '' && searchValue == value }}">{{value}}</text>
+                <text class="p-rack" wx:else>{{value}}</text>
+            </view>
+            <!-- <van-tag type="primary" wx:if="{{ searchValue != '' && searchValue == item.rack_number }}" plain>{{ item.rack_number }}</van-tag> -->
+            <view class="action-btn">
+                <van-button type="primary" plain bindtap="moveRack" data-position="{{ item.position }}">+</van-button>
+                <van-button type="danger" wx:if="{{ item.rack_number}}" plain bindtap="delRack" data-position="{{ item.position }}" data-number="{{ item.rack_number }}">-</van-button>
+            </view>
             <van-icon
                 wx:if="{{ activeId }}"
                 name="checked"
@@ -60,3 +65,13 @@
     <image src="../../images/icons/icon-nodata.png"></image>
     <text>暂无数据</text>
 </view>
+
+<van-popup show="{{ showPicker }}" bind:close="onClose"  position="bottom">
+    <van-picker
+        show-toolbar
+        title="选择设备"
+        columns="{{ delRackList }}"
+        bind:cancel="onCancelDel"
+        bind:confirm="onConfirmDel"
+    />
+</van-popup>
