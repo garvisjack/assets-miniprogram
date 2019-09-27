@@ -32,6 +32,8 @@ Page({
     hasRack: false,
     // 移除的设备
     delRackList: [],
+    newNumber: [],
+    newDelNumber: [],
     delRack: '',
     delPosition: '',
     showPicker: false
@@ -66,28 +68,6 @@ Page({
     this.setData({ activeId: detail.id })
   },
 
-  removeRack: function(event) {
-    this.setData({
-      position: event.currentTarget.dataset.position,
-      number: event.currentTarget.dataset.number
-    })
-    wx.showModal({
-      title: '提示',
-      showCancel: true,
-      content: `将${this.data.number}从该位置移除？`,
-      cancelText: '取消',
-      confirmText: '确认',
-      confirmColor: '#074195',
-      success: res => {
-        if (res.confirm) {
-          this.moveRackToPosition(false)
-        } else if (res.cancel) {
-          
-        }
-      }
-    })
-  },
-
   moveRack: function(event) {
     if(this.data.searchValue == '' || this.data.searchValue == null) {
       wx.showToast({
@@ -97,18 +77,10 @@ Page({
       })
       return
     }
-    // 判断该位置尚未移除的情况，提示去移除
-    console.log(this.data.hasRack)
-    if(this.data.hasRack) {
-      wx.showToast({
-        title: `${this.data.searchValue}在${this.data.room}${this.data.position}，请移除后再操作`,
-        icon: 'none',
-        duration: 2000
-      })
-      return
-    }
+
     this.setData({
-      position: event.currentTarget.dataset.position
+      position: event.currentTarget.dataset.position,
+      newNumber: event.currentTarget.dataset.number
     })
     wx.showModal({
       title: '提示',
@@ -139,21 +111,27 @@ Page({
       options = {
         username: this.data.userInfo.name,
         userId: this.data.userInfo._id,
-        number: '',
+        number: this.data.delRack,
+        newNumber: this.data.newDelNumber,
         room: this.data.room,
         position: this.data.position,
         dateTime: dateTime,
-        status: 0
+        status: 0,
+        statusName: '移除'
       }
+    // 新增操作
     }else{
+      this.data.newNumber.push(this.data.searchValue)
       options = {
         username: this.data.userInfo.name,
         userId: this.data.userInfo._id,
         number: this.data.searchValue,
+        newNumber: this.data.newNumber,
         room: this.data.room,
         position: this.data.position,
         dateTime: dateTime,
-        status: 1
+        status: 1,
+        statusName: '增加'
       }
     }
 
@@ -164,9 +142,17 @@ Page({
       // 传递给云函数的event参数
       data: options
     }).then(res => {
+      if(res.result == 'notrack') {
+        wx.showToast({
+          title: '机柜不存在，请重试',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
       if(res.result == 'exist') {
         wx.showToast({
-          title: '操作失败，位置已被占用',
+          title: '操作失败，机柜使用中',
           icon: 'none',
           duration: 2000
         })
@@ -186,6 +172,9 @@ Page({
           duration: 2000
         })
       }
+      this.setData({
+        showPicker: false
+      })
       wx.hideLoading()
      
     }).catch(err => {
@@ -215,7 +204,8 @@ Page({
       return
     }
     this.setData({
-      searchValue: e.detail
+      searchValue: e.detail,
+      hasRack: false
     })
     // 匹配搜索
     this.getRackPosition()
@@ -292,11 +282,11 @@ Page({
     if(this.data.searchValue == '') {
       this.setData({
         room: this.data.roomList[0],
-        mainActiveIndex: 0
+        mainActiveIndex: 0,
+        hasRack: false
       })
     }else{
       // 若有搜索内容，判断有无搜索结果
-      console.log(allPositionList)
       for(let items of allPositionList) {
         if(items.rack_number.indexOf(this.data.searchValue) > -1) {
           console.log(items.rack_number)
@@ -321,9 +311,6 @@ Page({
           title: '未找到相应机柜',
           icon: 'none',
           duration: 2000
-        })
-        this.setData({
-          hasRack: false
         })
       }
     }
@@ -380,6 +367,8 @@ Page({
     this.setData({
       delRackList: event.currentTarget.dataset.number,
       delPosition: event.currentTarget.dataset.position,
+      position: event.currentTarget.dataset.position,
+      number: event.currentTarget.dataset.number,
       showPicker: true
     })
   },
@@ -393,6 +382,25 @@ Page({
     let delResult = this.data.delRackList
     delResult.splice(index, 1)
     console.log(delResult)
+
+    this.setData({
+      newDelNumber: delResult
+    })
+    wx.showModal({
+      title: '提示',
+      showCancel: true,
+      content: `将${this.data.delRack}从该位置移除？`,
+      cancelText: '取消',
+      confirmText: '确认',
+      confirmColor: '#074195',
+      success: res => {
+        if (res.confirm) {
+          this.moveRackToPosition(false)
+        } else if (res.cancel) {
+          
+        }
+      }
+    })
   },
 
   onCancelDel() {

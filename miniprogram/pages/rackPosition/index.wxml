@@ -47,8 +47,8 @@
             </view>
             <!-- <van-tag type="primary" wx:if="{{ searchValue != '' && searchValue == item.rack_number }}" plain>{{ item.rack_number }}</van-tag> -->
             <view class="action-btn">
-                <van-button type="primary" plain bindtap="moveRack" data-position="{{ item.position }}">+</van-button>
-                <van-button type="danger" wx:if="{{ item.rack_number}}" plain bindtap="delRack" data-position="{{ item.position }}" data-number="{{ item.rack_number }}">-</van-button>
+                <van-button type="primary" plain bindtap="moveRack" data-position="{{ item.position }}" data-number="{{ item.rack_number }}">+</van-button>
+                <van-button type="danger" plain bindtap="delRack" data-position="{{ item.position }}" data-number="{{ item.rack_number }}">-</van-button>
             </view>
             <van-icon
                 wx:if="{{ activeId }}"
