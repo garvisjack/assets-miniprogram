@@ -1,24 +1,33 @@
 <view class="container">
-    
+    <view class="top-tab">
+        <van-tabs active="{{ tabActive }}" bind:change="onChangeTab" color="#074195">
+            <van-tab title="到期未归还"></van-tab>
+            <van-tab title="正常借用中"></van-tab>
+            <van-tab title="近期已归还"></van-tab>
+        </van-tabs>
+    </view>
     <view class="table">
         <view class="tr bg-w">
             <view class="th">设备编号</view>
             <view class="th">名称</view>
-            <view class="th ">借用人</view>
-            <view class="th ">预计归还时间</view>
+            <view class="th">借用人</view>
+            <view class="th" wx:if="{{ tabActive != 2}}">预期归还时间</view>
+            <view class="th" wx:if="{{ tabActive == 2}}">实际归还时间</view>
         </view>
         <block wx:for="{{deviceList}}" wx:key="{{index}}">
             <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
                 <view class="td">{{item.device_number}}</view>
                 <view class="td">{{item.device_name}}</view>
                 <view class="td">{{item.user_name}}</view>
-                <view class="td">{{item.expect_return_time}}</view>
+                <view class="td" wx:if="{{ tabActive != 2}}">{{item.expect_return_time}}</view>
+                <view class="td" wx:if="{{ tabActive == 2}}">{{item.real_return_time}}</view>
             </view>
             <view class="tr" wx:else>
                 <view class="td">{{item.device_number}}</view>
                 <view class="td">{{item.device_name}}</view>
                 <view class="td">{{item.user_name}}</view>
-                <view class="td">{{item.expect_return_time}}</view>
+                <view class="td" wx:if="{{ tabActive != 2}}">{{item.expect_return_time}}</view>
+                <view class="td" wx:if="{{ tabActive == 2}}">{{item.real_return_time}}</view>
             </view>
         </block>
     </view>
@@ -28,3 +37,5 @@
     <image src="../../images/icons/icon-nodata.png"></image>
     <text>暂无数据</text>
 </view>
+<van-divider contentPosition="center" wx:if="{{ loadMore && !loading}}">上滑查看更多</van-divider>
+<van-divider contentPosition="center" wx:if="{{ !loadMore && !loading && !noData}}">没有更多了</van-divider>

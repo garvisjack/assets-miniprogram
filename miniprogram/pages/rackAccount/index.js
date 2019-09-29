@@ -9,8 +9,11 @@ Page({
     userInfo: '',
     noData: true,
     curPage: 1,
-    pageSize: 10,
-    loading: true
+    pageSize: 50,
+    loading: true,
+    loadMore: false,
+    tabActive: 0,
+    tabTitle: ''
   },
 
   /**
@@ -23,7 +26,7 @@ Page({
         userInfo: userInfo
       })
     }
-    this.getDeviceAccount()
+    this.getRackAccount()
   },
 
   resetPage: function() {
@@ -33,7 +36,7 @@ Page({
     })
   },
 
-  getDeviceAccount: function() {
+  getRackAccount: function() {
     wx.showLoading()
     wx.cloud.callFunction({
       // 要调用的云函数名称
@@ -51,6 +54,15 @@ Page({
           rackList: this.data.rackList.concat(res.result.rackAccount.data),
           noData: false
         })
+        if(res.result.rackAccount.data.length == this.data.pageSize) {
+          this.setData({
+            loadMore: true
+          })
+        }else{
+          this.setData({
+            loadMore: false
+          })
+        }
       }else{
         if(this.data.rackList.length == 0) {
           this.setData({
@@ -99,6 +111,29 @@ Page({
     return format;
   },
 
+  onChangeTab(event) {
+    // 重新根据条件渲染列表，从第一页开始
+    this.setData({
+      tabActive: event.detail.index,
+      tabTitle: event.detail.title,
+      curPage: 1,
+      rackList: [],
+      loadMore: false,
+      loading: true
+    })
+    this.getRackAccount()
+  },
+
+  checkDate: function(date2) {
+    let oDate1 = new Date();
+    let oDate2 = new Date(date2);
+    if (oDate1.getTime() >= oDate2.getTime()) {
+        return false;
+    } else {
+        return true;
+    }
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -131,8 +166,8 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-    this.data.curPage = 1
-    this.getDeviceAccount()
+    // this.data.curPage = 1
+    // this.getRackAccount()
   },
 
   /**
@@ -140,7 +175,7 @@ Page({
    */
   onReachBottom: function () {
     this.data.curPage++
-    this.getDeviceAccount()
+    this.getRackAccount()
   },
 
   /**

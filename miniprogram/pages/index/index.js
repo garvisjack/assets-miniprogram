@@ -85,7 +85,7 @@ Page({
     }).then(res => {
       console.log(res.result)
       // 基础信息
-      if(res.result.allDeviceSend[0].data) {
+      if(res.result.allDeviceSend.length) {
         this.setData({
           deviceSend: res.result.allDeviceSend[0].data,
           deviceNum: res.result.total
@@ -108,7 +108,7 @@ Page({
         })
       }
       // 机柜借用数量
-      if(res.result.allRackSend[0].data) {
+      if(res.result.allRackSend.length) {
         this.setData({
           rackSend: res.result.allRackSend[0].data,
           rackNum: res.result.rackTotal

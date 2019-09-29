@@ -9,7 +9,7 @@ Page({
     project: '',
     dateTime: '',
     userInfo: '',
-    dateText: '预计归还日期',
+    dateText: '预期归还时间',
     minHour: 10,
     maxHour: 20,
     minDate: new Date().getTime(),
@@ -99,7 +99,7 @@ Page({
     }
     if(this.data.dateTime == ''){
       wx.showToast({
-        title: '预计归还日期不能为空',
+        title: '预期归还时间不能为空',
         icon: 'none',
         duration: 2000
       })

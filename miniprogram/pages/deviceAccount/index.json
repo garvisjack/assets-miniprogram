@@ -1,7 +1,8 @@
 {
   "usingComponents": {
-   
+    "van-tab": "../../vant/tab/index",
+    "van-tabs": "../../vant/tabs/index",
+    "van-divider": "../../vant/divider/index"
   },
-  "navigationBarTitleText": "设备台账",
-  "enablePullDownRefresh": true
+  "navigationBarTitleText": "设备台账"
 }

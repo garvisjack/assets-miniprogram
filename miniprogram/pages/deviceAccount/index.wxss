@@ -1,3 +1,6 @@
+.top-tab{
+  width: 100%;
+}
 .table {
     width: 100%;
     border: 0px solid darkgray;
@@ -24,10 +27,13 @@
   .th {
     width: 40%;
     justify-content: center;
-    background: #074195;
-    color: #fff;
+    background: #fff;
+    color: #333;
     display: flex;
     min-height: 80rpx;
     align-items: center;
     font-size: 28rpx;
+  }
+  .van-tab--active{
+    color: #074195 !important;
   }

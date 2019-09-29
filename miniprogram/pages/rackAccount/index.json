@@ -1,7 +1,8 @@
 {
   "usingComponents": {
-   
+    "van-tab": "../../vant/tab/index",
+    "van-tabs": "../../vant/tabs/index",
+    "van-divider": "../../vant/divider/index"
   },
-  "navigationBarTitleText": "机柜台账",
-  "enablePullDownRefresh": true
+  "navigationBarTitleText": "机柜台账"
 }

@@ -9,8 +9,10 @@ Page({
     userInfo: '',
     noData: true,
     curPage: 1,
-    pageSize: 10,
-    loading: true
+    pageSize: 50,
+    loading: true,
+    loadMore: false,
+    tabActive: 0
   },
 
   /**
@@ -34,6 +36,10 @@ Page({
   },
 
   getDeviceAccount: function() {
+    let sendStatus = 1
+    if(this.data.tabActive == 2) {
+      sendStatus = 0
+    }
     wx.showLoading()
     wx.cloud.callFunction({
       // 要调用的云函数名称
@@ -42,22 +48,57 @@ Page({
       data: {
         pageIndex: this.data.curPage,
         pageSize: this.data.pageSize,
-        filter: {send_status: 1}
+        filter: {send_status: sendStatus}
       }
     }).then(res => {
       // 获取设备借用表中数据
       if(res.result.deviceAccount.data.length) {
+        // 重构过期的列表
+        let accountResult = []
+        // 过期
+        if(this.data.tabActive == 0) {
+          for(let item of res.result.deviceAccount.data) {
+            if(this.checkDate(item.expect_return_time)) {
+  
+            }else{
+              accountResult.push(item)
+            }
+          }
+        }
+        // 借用中 正常
+        if(this.data.tabActive == 1) {
+          for(let item of res.result.deviceAccount.data) {
+            if(this.checkDate(item.expect_return_time)) {
+              accountResult.push(item)
+            }
+          }
+        }
+        // 已归还的
+        if(this.data.tabActive == 2) {
+          accountResult = res.result.deviceAccount.data
+        }
+
         this.setData({
-          deviceList: this.data.deviceList.concat(res.result.deviceAccount.data),
+          deviceList: this.data.deviceList.concat(accountResult),
           noData: false
         })
         console.log(this.data.deviceList)
+        if(res.result.deviceAccount.data.length == this.data.pageSize) {
+          this.setData({
+            loadMore: true
+          })
+        }else{
+          this.setData({
+            loadMore: false
+          })
+        }
       }else{
         if(this.data.deviceList.length == 0) {
           this.setData({
             noData: true
           })
         }
+        
       }
       this.setData({
         loading: false
@@ -100,6 +141,28 @@ Page({
     return format;
   },
 
+  onChangeTab(event) {
+    // 重新根据条件渲染列表，从第一页开始
+    this.setData({
+      tabActive: event.detail.index,
+      curPage: 1,
+      deviceList: [],
+      loadMore: false,
+      loading: true
+    })
+    this.getDeviceAccount()
+  },
+
+  checkDate: function(date2) {
+    let oDate1 = new Date();
+    let oDate2 = new Date(date2);
+    if (oDate1.getTime() >= oDate2.getTime()) {
+        return false;
+    } else {
+        return true;
+    }
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -132,8 +195,8 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-    this.data.curPage = 1
-    this.getDeviceAccount()
+    // this.data.curPage = 1
+    // this.getDeviceAccount()
   },
 
   /**
