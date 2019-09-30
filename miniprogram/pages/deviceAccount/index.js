@@ -83,7 +83,12 @@ Page({
           noData: false
         })
         console.log(this.data.deviceList)
-        if(res.result.deviceAccount.data.length == this.data.pageSize) {
+        if(this.data.deviceList.length == 0) {
+          this.setData({
+            noData: true
+          })
+        }
+        if(accountResult.length == this.data.pageSize) {
           this.setData({
             loadMore: true
           })
@@ -148,7 +153,8 @@ Page({
       curPage: 1,
       deviceList: [],
       loadMore: false,
-      loading: true
+      loading: true,
+      noData: true
     })
     this.getDeviceAccount()
   },

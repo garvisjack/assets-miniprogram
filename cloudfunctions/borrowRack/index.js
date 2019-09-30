@@ -36,7 +36,8 @@ exports.main = async (event, context) => {
         project: event.project,
         send_time: event.sendTime,
         user_name: event.username,
-        user_id: event.userId
+        user_id: event.userId,
+        type: isRack.data[0].type
       }
     })
     return {

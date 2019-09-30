@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    searchValue: 'TE0026',
+    searchValue: '',
     // 机柜信息
     rackInfo: '',
     // 移除的设备
@@ -18,7 +18,10 @@ Page({
     userInfo: '',
     // 增加的设备
     addDeviceNumber: '',
-    addDevicelist: []
+    addDevicelist: [],
+    showHistory: false,
+    rackSendHistory: [],
+    historyList: []
   },
 
   /**
@@ -29,6 +32,11 @@ Page({
       let userInfo = JSON.parse(wx.getStorageSync('userInfo'));
       this.setData({
         userInfo: userInfo
+      })
+    }
+    if(options.number) {
+      this.setData({
+        searchValue: options.number
       })
     }
     this.getRackInfo()
@@ -45,6 +53,7 @@ Page({
         number: this.data.searchValue
       }
     }).then(res => {
+      console.log(res.result.rackInfo.data[0])
       // 基础信息
       if(res.result.rackInfo.data[0]) {
         this.setData({
@@ -86,14 +95,26 @@ Page({
       return
     }
     this.setData({
-      searchValue: e.detail
+      searchValue: e.detail,
+      historyList: [],
+      rackSendHistory: []
     })
     this.getRackInfo()
   },
 
+  onChangeSearch: function(e) {
+    this.setData({
+      searchValue: e.detail,
+      historyList: [],
+      rackSendHistory: []
+    })
+  },
+
   onCancel: function() {
     this.setData({
-      searchValue: ''
+      searchValue: '',
+      historyList: [],
+      rackSendHistory: []
     })
   },
 
@@ -138,7 +159,6 @@ Page({
       username: this.data.userInfo.name,
       userId: this.data.userInfo._id
     }
-    console.log(options)
     wx.showLoading()
     wx.cloud.callFunction({
       // 要调用的云函数名称
@@ -149,7 +169,8 @@ Page({
       wx.hideLoading()
       this.setData({
         loading: false,
-        showPicker: false
+        showPicker: false,
+        showHistory: false
       })
       this.getRackInfo()
       wx.showToast({
@@ -162,7 +183,8 @@ Page({
       this.setData({
         loading: false,
         delDeviceList: [],
-        showPicker: false
+        showPicker: false,
+        showHistory: false
       })
       this.getRackInfo()
       wx.showToast({
@@ -241,7 +263,6 @@ Page({
     }else{
       addContent = addList
     }
-    console.log(addContent)
 
     let options = {
       id: this.data.delId,
@@ -253,19 +274,28 @@ Page({
       username: this.data.userInfo.name,
       userId: this.data.userInfo._id
     }
-    console.log(options)
     wx.cloud.callFunction({
       // 要调用的云函数名称
       name: 'rackAddDevice',
       // 传递给云函数的event参数
       data: options
     }).then(res => {
-      console.log(res)
       wx.hideLoading()
       this.setData({
         loading: false,
-        showAddDevice: false
+        showAddDevice: false,
+        showHistory: false
       })
+
+      if(res.result == 'notdevice') {
+        wx.showToast({
+          title: '设备不存在，请重试',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
+
       if(res.result == 'exist') {
         wx.showToast({
           title: '操作失败，设备已借用',
@@ -274,6 +304,7 @@ Page({
         })
         return
       }
+
       this.getRackInfo()
       wx.showToast({
         title: '增加成功',
@@ -286,7 +317,8 @@ Page({
       this.setData({
         loading: false,
         delDeviceList: [],
-        showAddDevice: false
+        showAddDevice: false,
+        showHistory: false
       })
       this.getRackInfo()
     })
@@ -330,6 +362,64 @@ Page({
         format = format.replace(formateArr[i], returnArr[i]);
     }
     return format;
+  },
+
+  // 展示历史记录
+  showHistory: function() {
+    this.setData({
+      showHistory: !this.data.showHistory
+    })
+
+    if(this.data.showHistory) {
+      wx.showLoading()
+      wx.cloud.callFunction({
+        // 要调用的云函数名称
+        name: 'getRackHistory',
+        // 传递给云函数的event参数
+        data: {
+          filter: {rack_number: this.data.searchValue}
+        }
+      }).then(res => {
+        // 机柜历史
+        if(res.result.allRackChange.length) {
+          this.setData({
+            rackSendHistory: res.result.allRackChange[0].data
+          })
+        }
+  
+        let steps = this.data.rackSendHistory
+ 
+        // 处理历史记录数组
+        for(let item of steps) {
+          item.desc = item.change_time
+          if(item.status == 1) {
+            item.text = `${item.user_name}在机柜中增加${item.device_number}`
+          }
+          if(item.status == 0) {
+            item.text = `${item.user_name}从机柜中移除${item.device_number}`
+          }
+        }
+
+        if(steps.length) {
+          this.setData({
+            historyList: steps
+          })
+        }else{
+          wx.showToast({
+            title: '暂无历史信息',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+        wx.hideLoading()
+  
+      }).catch(err => {
+        wx.hideLoading()
+        this.setData({
+          loading: false
+        })
+      })
+    }
   },
 
   /**

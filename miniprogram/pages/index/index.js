@@ -38,6 +38,11 @@ Page({
     this.getHomeData()
   },
 
+  onShow: function () {
+    this.getBannerList()
+    this.getHomeData()
+  },  
+
   // 开始搜索
   onSearch: function(e) {
     if(e.detail == '' || e.detail == null) {

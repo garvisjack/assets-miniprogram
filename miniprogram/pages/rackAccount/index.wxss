@@ -32,7 +32,8 @@
     display: flex;
     min-height: 80rpx;
     align-items: center;
-    font-size: 28rpx;
+    font-size: 26rpx;
+    font-weight: 600;
   }
   .van-tab--active{
     color: #074195 !important;

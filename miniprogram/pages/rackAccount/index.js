@@ -13,7 +13,7 @@ Page({
     loading: true,
     loadMore: false,
     tabActive: 0,
-    tabTitle: ''
+    tabTitle: 'CDV1'
   },
 
   /**
@@ -45,7 +45,7 @@ Page({
       data: {
         pageIndex: this.data.curPage,
         pageSize: this.data.pageSize,
-        filter: {send_status: 1}
+        filter: {send_status: 1, type: this.data.tabTitle}
       }
     }).then(res => {
       // 获取机柜借用表中数据
@@ -54,6 +54,11 @@ Page({
           rackList: this.data.rackList.concat(res.result.rackAccount.data),
           noData: false
         })
+        if(this.data.rackList.length == 0) {
+          this.setData({
+            noData: true
+          })
+        }
         if(res.result.rackAccount.data.length == this.data.pageSize) {
           this.setData({
             loadMore: true
@@ -119,9 +124,17 @@ Page({
       curPage: 1,
       rackList: [],
       loadMore: false,
-      loading: true
+      loading: true,
+      noData: true
     })
     this.getRackAccount()
+  },
+
+  goRackInfo: function(event) {
+    let number = event.currentTarget.dataset.number;
+    wx.navigateTo({
+      url: `/pages/rackInfo/index?number=${number}`
+    })
   },
 
   checkDate: function(date2) {

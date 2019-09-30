@@ -17,13 +17,13 @@
         </view>
         <block wx:for="{{rackList}}" wx:key="{{index}}">
             <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
-                <view class="td">{{item.rack_number}}</view>
+                <view class="td" bindtap="goRackInfo" data-number="{{item.rack_number}}" style="text-decoration:underline;color:#074195">{{item.rack_number}}</view>
                 <view class="td">{{item.project}}</view>
                 <view class="td">{{item.user_name}}</view>
                 <view class="td">{{item.expect_return_time}}</view>
             </view>
             <view class="tr" wx:else>
-                <view class="td">{{item.rack_number}}</view>
+                <view class="td" bindtap="goRackInfo" data-number="{{item.rack_number}}" style="text-decoration:underline;color:#074195">{{item.rack_number}}</view>
                 <view class="td">{{item.project}}</view>
                 <view class="td">{{item.user_name}}</view>
                 <view class="td">{{item.expect_return_time}}</view>

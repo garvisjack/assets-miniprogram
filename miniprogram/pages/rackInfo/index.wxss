@@ -133,3 +133,6 @@ page{
     margin-top: 16rpx;
     margin-right:60rpx;
 }
+.rack-history{
+    width: 100%;
+}

@@ -38,4 +38,4 @@
     <text>暂无数据</text>
 </view>
 <van-divider contentPosition="center" wx:if="{{ loadMore && !loading}}">上滑查看更多</van-divider>
-<van-divider contentPosition="center" wx:if="{{ !loadMore && !loading && !noData}}">没有更多了</van-divider>
+<van-divider contentPosition="center" wx:if="{{ !loadMore && !loading && !noData}}">没有更多了</van-divider> 

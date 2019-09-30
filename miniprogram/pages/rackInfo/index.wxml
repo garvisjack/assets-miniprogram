@@ -5,6 +5,7 @@
             placeholder="请输入机柜编号"
             bind:search="onSearch"
             bind:cancel="onCancel"
+            bind:change="onChangeSearch"
             maxlength="24"
         />
         <image src="../../images/icons/icon-scancode.png" class="scanCode-image" bindtap="scanCode"/>
@@ -78,14 +79,25 @@
             <van-panel use-footer-slot>
                 <view class="device-info">
                     <text style="color:#074195;height:30px;line-height:30px" bindtap="goDeviceInfo">其他组件</text>
-                    <block wx:for="{{rackInfo.other}}" wx:key="idx" wx:for-item="val">
-                        <text>{{val}}</text>
+                    <block wx:for="{{rackInfo.other}}" wx:key="index" wx:for-item="val">
+                        <text>{{val}} - {{rackInfo.otherName[index]}}</text>
                     </block>
                 </view>
             </van-panel>
         </view>
 
 
+    </view>
+    <view class="rack-history" wx:if="{{!noData}}">
+        <van-cell title="历史信息" is-link value="" arrow-direction="down" bindtap="showHistory"/>
+        <view class="device-history" wx:if="{{showHistory}}">
+            <van-steps
+                steps="{{ historyList }}"
+                active="{{ active }}"
+                direction="vertical"
+                active-color="#074195"
+                />
+        </view>
     </view>
 </view>
 

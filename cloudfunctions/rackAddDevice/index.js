@@ -7,6 +7,15 @@ const _ = db.command
 
 // 云函数入口函数
 exports.main = async (event, context) => {
+  // 检查该设备是否在设备列表中
+  const isDevice =  await db.collection('device_list').where({
+    number: event.deviceNumber
+  }).get()
+
+  // 添加借用信息
+  if(isDevice.data.length == 0) {
+    return 'notdevice'
+  }
 
   // 检查是否已经被人借用
   let hasDevice =  await db.collection('device_send').where({
