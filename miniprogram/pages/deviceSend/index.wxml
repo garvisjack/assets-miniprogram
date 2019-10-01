@@ -9,7 +9,7 @@
                 <view class="device-info">
                     <text data-number="{{item.device_number}}" style="text-decoration:underline;color:#074195" bindtap="goDeviceInfo">设备编号：{{item.device_number}}</text>
                     <text>设备名称：{{item.device_name}}</text>
-                    <text>借用日期：{{item.send_time}}</text>
+                    <text>借用时间：{{item.send_time}}</text>
                     <text>预期归还时间：{{item.expect_return_time}}</text>
                     <text wx:if="{{item.real_return_time}}">实际归还时间：{{item.real_return_time}}</text>
                 </view>
@@ -24,7 +24,7 @@
                 <view class="device-info">
                     <text data-number="{{item.device_number}}" style="text-decoration:underline;color:#074195" bindtap="goDeviceInfo">设备编号：{{item.device_number}}</text>
                     <text>设备名称：{{item.device_name}}</text>
-                    <text>借用日期：{{item.send_time}}</text>
+                    <text>借用时间：{{item.send_time}}</text>
                     <text>预期归还时间：{{item.expect_return_time}}</text>
                     <text wx:if="{{item.real_return_time}}">实际归还日期：{{item.real_return_time}}</text>
                 </view>
