@@ -50,7 +50,7 @@ Page({
       return
     }
     wx.showLoading({
-      title: '登陆中..',
+      title: '正在登录中..',
     })
     wx.cloud.callFunction({
       // 要调用的云函数名称

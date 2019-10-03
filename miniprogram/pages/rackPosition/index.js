@@ -36,7 +36,10 @@ Page({
     newDelNumber: [],
     delRack: '',
     delPosition: '',
-    showPicker: false
+    showPicker: false,
+    // 右侧滚动条高度
+    positionScroll: '500',
+    toView: null
   },
 
   /**
@@ -289,8 +292,6 @@ Page({
       // 若有搜索内容，判断有无搜索结果
       for(let items of allPositionList) {
         if(items.rack_number.indexOf(this.data.searchValue) > -1) {
-          console.log(items.rack_number)
-          console.log(this.data.searchValue)
           for(let i =0;i < this.data.roomList.length;i++) {
             if(items.room == this.data.roomList[i]) {
               this.setData({
@@ -298,6 +299,7 @@ Page({
                 position: items.position,
                 mainActiveIndex: i
               })
+              this.chooseView(items._id)
             }
           }
           this.setData({
@@ -338,7 +340,6 @@ Page({
         }
       }
     }
-    console.log(positionList)
     this.setData({
       positionList: positionList
     })
@@ -381,7 +382,6 @@ Page({
 
     let delResult = this.data.delRackList
     delResult.splice(index, 1)
-    console.log(delResult)
 
     this.setData({
       newDelNumber: delResult
@@ -490,6 +490,12 @@ Page({
     this.setData({
       showPosition: false,
       showRoom: false
+    })
+  },
+  
+  chooseView: function(id) {
+    this.setData({
+      toView: id
     })
   },
 

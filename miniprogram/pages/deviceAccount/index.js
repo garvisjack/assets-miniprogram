@@ -12,7 +12,8 @@ Page({
     pageSize: 50,
     loading: true,
     loadMore: false,
-    tabActive: 0
+    tabActive: 0,
+    isTab: true
   },
 
   /**
@@ -58,24 +59,28 @@ Page({
         // 过期
         if(this.data.tabActive == 0) {
           for(let item of res.result.deviceAccount.data) {
-            if(this.checkDate(item.expect_return_time)) {
-  
-            }else{
+            if(this.checkDate(item.expect_return_time) != true) {
+              item.subTime = this.checkDate(item.expect_return_time)
               accountResult.push(item)
             }
           }
+          accountResult.sort(this.objectArraySort('subTime', true))
         }
         // 借用中 正常
         if(this.data.tabActive == 1) {
           for(let item of res.result.deviceAccount.data) {
-            if(this.checkDate(item.expect_return_time)) {
+            if(this.checkDate(item.expect_return_time) == true) {
               accountResult.push(item)
             }
           }
         }
         // 已归还的
         if(this.data.tabActive == 2) {
-          accountResult = res.result.deviceAccount.data
+          for(let item of res.result.deviceAccount.data) {
+            item.returnTime = new Date(item.real_return_time).getTime()
+            accountResult.push(item)
+          }
+          accountResult.sort(this.objectArraySort('returnTime', true))
         }
 
         this.setData({
@@ -106,7 +111,8 @@ Page({
         
       }
       this.setData({
-        loading: false
+        loading: false,
+        isTab: false
       })
       wx.hideLoading()
     
@@ -121,6 +127,22 @@ Page({
         loading: false
       })
     })
+  },
+
+  objectArraySort: function(keyName, flag) {
+    return function (objectN, objectM) {
+      var valueN = objectN[keyName]
+      var valueM = objectM[keyName]
+      if(flag) {
+        if (valueN < valueM) return 1
+        else if (valueN > valueM) return -1
+        else return 0
+      }else{
+        if (valueN > valueM) return 1
+        else if (valueN < valueM) return -1
+        else return 0
+      }
+     }
   },
 
   formatTime: function(number, format) {
@@ -147,6 +169,11 @@ Page({
   },
 
   onChangeTab(event) {
+    // 防止加载完成前多次点击
+    if(this.data.isTab) {
+      return
+    }
+
     // 重新根据条件渲染列表，从第一页开始
     this.setData({
       tabActive: event.detail.index,
@@ -154,8 +181,10 @@ Page({
       deviceList: [],
       loadMore: false,
       loading: true,
-      noData: true
+      noData: true,
+      isTab: true
     })
+
     this.getDeviceAccount()
   },
 
@@ -163,10 +192,18 @@ Page({
     let oDate1 = new Date();
     let oDate2 = new Date(date2);
     if (oDate1.getTime() >= oDate2.getTime()) {
-        return false;
+      let sub = oDate1.getTime() - oDate2.getTime()
+      return sub;
     } else {
-        return true;
+      return true;
     }
+  },
+
+  goDeviceInfo: function(event) {
+    let number = event.currentTarget.dataset.number;
+    wx.navigateTo({
+      url: `/pages/deviceInfo/index?number=${number}`
+    })
   },
 
   /**

@@ -31,12 +31,16 @@
             scroll-y
             class="tree-select__content"
             style="height: {{ mainHeight }}px"
+            scroll-into-view="{{ toView }}"
         >
             <view
                 wx:for="{{ positionList }}"
                 wx:key="index"
                 class="items {{ activeId === index ? 'main-active-class' : '' }}"
                 data-item="{{ item.position }}"
+                data-id="{{ item._id }}"
+                bindtap="chooseView"
+                id="{{ item._id }}"
             >
             <!--显示逻辑-->
             <!-- <text wx:if="{{ searchValue != '' && searchValue == item.rack_number }}" class="active-item">{{ item.position }}</text> -->

@@ -1,11 +1,9 @@
 <view class="container">
     <view class="top-tab">
-        <van-tabs active="{{ tabActive }}" bind:change="onChangeTab" color="#074195" swipe-threshold="5">
-            <van-tab title="CDV1"></van-tab>
-            <van-tab title="CDV2"></van-tab>
-            <van-tab title="CIC1"></van-tab>
-            <van-tab title="CIC2"></van-tab>
-            <van-tab title="CCC"></van-tab>
+        <van-tabs active="{{ tabActive }}" bind:change="onChangeTab" color="#074195" swipe-threshold="6">
+            <block wx:for="{{titleList}}" wx:key="{{index}}">
+                <van-tab title="{{item}}"></van-tab>
+            </block>
         </van-tabs>
     </view>
     <view class="table" wx:if="{{!noData}}">

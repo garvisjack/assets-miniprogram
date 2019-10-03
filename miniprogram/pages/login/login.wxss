@@ -1,16 +1,22 @@
 /* miniprogram/pages/login/login.wxss */
 page{
-    background-color: #f5f5f5;
+    background-color: #fff;
 }
 .login-box{
     width: 80%;
-    margin: 50% 10%;
+    margin: 120rpx 10%;
+    margin-top: 0;
+}
+.login-logo{
+    display: block;
+    width: 750rpx;
+    height: 480rpx;
 }
 .login-box .field{
     margin-bottom: 40rpx;
     height: 100rpx;
     line-height: 100rpx;
-    background-color: #fff;
+    background-color: #f5f5f5;
 }
 .login-box .field:last-child{
     margin-bottom: 0;
@@ -41,4 +47,10 @@ page{
     width: 36rpx;
     height: 36rpx;
     margin: 32rpx 20rpx 32rpx 20rpx;
+}
+.login-tips{
+    font-size: 28rpx;
+    text-align: center;
+    color: #333;
+    line-height: 28rpx;
 }

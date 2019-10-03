@@ -24,7 +24,7 @@ exports.main = async (event, context) => {
 
   // 添加借用信息
   if(hasRack.data.length > 0) {
-    return 'exist'
+    return hasRack
   }else{
     const sendRack =  await db.collection('rack_send').add({
       data: {

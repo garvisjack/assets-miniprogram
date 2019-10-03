@@ -3,8 +3,8 @@ page{
 }
 
 .tree-select{position:relative;font-size:28rpx;-webkit-user-select:none;user-select:none;}
-.tree-select__nav{position:absolute;top:0;bottom:0;left:0;width:35%;min-width:120px;background-color:#fafafa}
-.tree-select__content{width:65%;margin-left:35%;background-color:#fff;box-sizing:border-box}
+.tree-select__nav{position:absolute;top:0;bottom:0;left:0;width:35%;min-width:120px;background-color:#fafafa;display: block}
+.tree-select__content{width:65%;margin-left:35%;background-color:#fff;box-sizing:border-box;display: block}
 .tree-select__nav .items{
     position: relative;
     padding: 0 20rpx;

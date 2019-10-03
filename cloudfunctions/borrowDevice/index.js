@@ -38,7 +38,7 @@ exports.main = async (event, context) => {
     return 'notdevice'
   }
   if(isRack.data.length > 0) {
-    return 'notdevice'
+    return 'israck'
   }
 
   if(hasDevice.data.length > 0 || hasDeviceRack.data.length > 0) {

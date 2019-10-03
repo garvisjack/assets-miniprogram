@@ -1,4 +1,5 @@
 <view class="container">
+    <image src="../../images/common/c-logo.png" class="login-logo" mode="aspectFit"/>
     <view class="login-box">
         <view class="field">
             <image src="../../images/icons/login-user.png"/>
@@ -25,5 +26,8 @@
             />
         </view>
         <van-button loading="{{ loginStatus }}" type="primary" loading-text="登陆中.." bindtap="toLogin">登录</van-button>
+    </view>
+    <view class="login-tips">
+        <van-icon name="warning" color="#074195" size="14px" style="margin-right: 5px"/>仅限于研发实验室内部使用
     </view>
 </view>

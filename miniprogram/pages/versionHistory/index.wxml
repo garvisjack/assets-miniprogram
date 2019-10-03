@@ -1,0 +1,34 @@
+<view class="container">
+    <view class="content">
+        <text class="line line-title">版本1.0 时间20191007</text>
+        <text class="line">1. 第一版本发布，数据从开发环境迁移到生产环境。</text>
+        <br/>
+        <text class="line line-title">版本Sprint03 时间20191005</text>
+        <text class="line">1. 登录页面：增加Logo</text>
+        <text class="line">2. 设备借用页面：修正时间选择器初始时间不更新问题，增加借用已经被借用的设备可以查看设备信息功能。</text>
+        <text class="line">3. 机柜借用页面：修正时间选择器初始时间不更新问题。</text>
+        <text class="line">4. 机柜位置页面：修正位置显示功能。</text>
+        <text class="line">5. 机柜台账页面：增加Other标签。</text>
+        <br/>
+        <text class="line line-title">版本Sprint02 时间20191001</text>
+        <text class="line">1. 云数据库：rack_list、device_list、rack_position不采用默认生成_id，采用自有_id。</text>
+        <text class="line">2. 设备信息页面：修正设备位置功能，新增加校准日期显示。</text>
+        <text class="line">3. 设备借用页面：修正可以借用到一个不存在设备。</text>
+        <text class="line">4. 机柜借用页面：修正可以借用到一个不存在机柜。</text>
+        <text class="line">5. 机柜信息页面：增加机柜历史变更情况。</text>
+        <text class="line">6. 机柜位置页面：增加可以在同一位置放置多台机柜的功能。</text>
+        <text class="line">7. 设备台账页面：增加到期未归还、正常借用中、近期已归还标签。</text>
+        <text class="line">8. 机柜台账页面：增加CDV1、CDV2、CIC1、CIC2、CCC标签。</text>
+        <text class="line">9. 取消机柜移动页面，设备状态变更页面。</text>
+        <br/>
+        <text class="line line-title">版本Sprint01 时间20190912</text>
+        <text class="line">1. 主界面完成</text>
+        <text class="line">2. 云函数部署完成</text>
+        <text class="line">3. 云数据库部署完成</text>
+        <br/>
+        <text class="line line-title">Kick-Off 时间20190713</text>
+        <text class="line">1. 编写开发方案STI</text>
+        <text class="line">2. 定义云数据库字段</text>
+        <text class="line">3. 创建问题清单</text>
+    </view>
+</view>

@@ -2,3 +2,10 @@
 page{
     background-color: #fff;
 }
+.login-logo{
+    display: block;
+    width: 750rpx;
+    height: 480rpx;
+    margin-top: -240rpx;
+    margin: 45% 0;
+}

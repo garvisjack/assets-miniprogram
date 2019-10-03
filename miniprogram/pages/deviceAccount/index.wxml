@@ -6,7 +6,7 @@
             <van-tab title="近期已归还"></van-tab>
         </van-tabs>
     </view>
-    <view class="table" wx:if="{{!noData}}">
+    <view class="table" wx:if="{{!noData & !loading}}">
         <view class="tr bg-w">
             <view class="th">设备编号</view>
             <view class="th">名称</view>
@@ -16,14 +16,14 @@
         </view>
         <block wx:for="{{deviceList}}" wx:key="{{index}}">
             <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
-                <view class="td">{{item.device_number}}</view>
+                <view class="td" bindtap="goDeviceInfo" data-number="{{item.device_number}}" style="text-decoration:underline;color:#074195">{{item.device_number}}</view>
                 <view class="td">{{item.device_name}}</view>
                 <view class="td">{{item.user_name}}</view>
                 <view class="td" wx:if="{{ tabActive != 2}}">{{item.expect_return_time}}</view>
                 <view class="td" wx:if="{{ tabActive == 2}}">{{item.real_return_time}}</view>
             </view>
             <view class="tr" wx:else>
-                <view class="td">{{item.device_number}}</view>
+                <view class="td" bindtap="goDeviceInfo" data-number="{{item.device_number}}" style="text-decoration:underline;color:#074195">{{item.device_number}}</view>
                 <view class="td">{{item.device_name}}</view>
                 <view class="td">{{item.user_name}}</view>
                 <view class="td" wx:if="{{ tabActive != 2}}">{{item.expect_return_time}}</view>

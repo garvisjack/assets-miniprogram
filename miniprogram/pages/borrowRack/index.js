@@ -12,7 +12,7 @@ Page({
     dateText: '预期归还时间',
     minHour: 10,
     maxHour: 20,
-    minDate: new Date().getTime(),
+    minDate: new Date().getTime() + 180000,
     currentDate: new Date().getTime(),
     formatter(type, value) {
       if (type === 'year') {
@@ -124,7 +124,6 @@ Page({
       // 传递给云函数的event参数
       data: options
     }).then(res => {
-      console.log(res)
       if(res.result == 'notrack') {
         wx.showToast({
           title: '机柜不存在，请重试',
@@ -133,12 +132,27 @@ Page({
         })
         return
       }
-      if(res.result == 'exist') {
-        wx.showToast({
-          title: '借用失败，机柜已借用',
-          icon: 'none',
-          duration: 2000
+      console.log(res.result.data[0].type)
+      if(res.result.data) {
+        const title = res.result.data[0].type
+        wx.showModal({
+          title: '提示',
+          showCancel: true,
+          content: '机柜已经被借用',
+          cancelText: '继续',
+          confirmText: '查看机柜',
+          confirmColor: '#074195',
+          success (res) {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: `/pages/rackAccount/index?title=${title}`
+              })
+            } else if (res.cancel) {
+              
+            }
+          }
         })
+        wx.hideLoading()
         return
       }
       if(res.result.sendRack._id) {
@@ -229,7 +243,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.setData({
+      minDate: new Date().getTime() + 180000
+    })
   },
 
   /**

@@ -46,10 +46,8 @@ Page({
   },
 
   updateContent: function() {
-    wx.showToast({
-      title: '当前版本为v20190812',
-      icon: 'none',
-      duration: 2000
+    wx.navigateTo({
+      url: `/pages/versionHistory/index`
     })
   },
 
@@ -78,7 +76,7 @@ Page({
       success (res) {
         if (res.confirm) {
           wx.removeStorage({
-            key: 'userName',
+            key: 'userInfo',
             success (res) {
               wx.redirectTo({
                 url: '/pages/login/login'

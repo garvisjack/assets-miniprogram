@@ -13,6 +13,7 @@ Page({
     loading: true,
     loadMore: false,
     tabActive: 0,
+    titleList: ['CDV1','CDV2','CIC1','CIC2','CCC','Other'],
     tabTitle: 'CDV1'
   },
 
@@ -25,6 +26,18 @@ Page({
       this.setData({
         userInfo: userInfo
       })
+    }
+    // 来自弹窗
+    if(options.title) {
+      const titleList = this.data.titleList
+      for(let i = 0;i<titleList.length;i++) {
+        if(titleList[i] == options.title) {
+          this.setData({
+            tabTitle: options.title,
+            tabActive: i
+          })
+        }
+      }
     }
     this.getRackAccount()
   },
@@ -50,8 +63,14 @@ Page({
     }).then(res => {
       // 获取机柜借用表中数据
       if(res.result.rackAccount.data.length) {
+        let accountResult = []
+        for(let item of res.result.rackAccount.data) {
+          item.expectTime = new Date(item.expect_return_time).getTime()
+          accountResult.push(item)
+        }
+        accountResult.sort(this.objectArraySort('expectTime', false))
         this.setData({
-          rackList: this.data.rackList.concat(res.result.rackAccount.data),
+          rackList: this.data.rackList.concat(accountResult),
           noData: false
         })
         if(this.data.rackList.length == 0) {
@@ -137,13 +156,30 @@ Page({
     })
   },
 
+  objectArraySort: function(keyName, flag) {
+    return function (objectN, objectM) {
+      var valueN = objectN[keyName]
+      var valueM = objectM[keyName]
+      if(flag) {
+        if (valueN < valueM) return 1
+        else if (valueN > valueM) return -1
+        else return 0
+      }else{
+        if (valueN > valueM) return 1
+        else if (valueN < valueM) return -1
+        else return 0
+      }
+     }
+  },
+
   checkDate: function(date2) {
     let oDate1 = new Date();
     let oDate2 = new Date(date2);
     if (oDate1.getTime() >= oDate2.getTime()) {
-        return false;
+      let sub = oDate1.getTime() - oDate2.getTime()
+      return sub;
     } else {
-        return true;
+      return true;
     }
   },
 

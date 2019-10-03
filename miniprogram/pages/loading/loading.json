@@ -1,4 +1,6 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "van-transition": "../../vant/transition/index"
+  },
   "navigationBarTitleText": "登录中.."
 }

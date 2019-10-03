@@ -11,7 +11,7 @@ Page({
     dateText: '预期归还时间',
     minHour: 10,
     maxHour: 20,
-    minDate: new Date().getTime(),
+    minDate: new Date().getTime() + 180000,
     currentDate: new Date().getTime(),
     formatter(type, value) {
       if (type === 'year') {
@@ -110,6 +110,27 @@ Page({
       data: options
     }).then(res => {
       console.log(res.result)
+      if(res.result == 'israck') {
+        wx.showModal({
+          title: '提示',
+          showCancel: true,
+          content: '输入的编号为机柜编号，如需要借用机柜请到机柜借用页面',
+          cancelText: '继续',
+          confirmText: '机柜借用',
+          confirmColor: '#074195',
+          success (res) {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: `/pages/borrowRack/index`
+              })
+            } else if (res.cancel) {
+              
+            }
+          }
+        })
+        wx.hideLoading()
+        return
+      }
       if(res.result == 'notdevice') {
         wx.showToast({
           title: '设备不存在，请重试',
@@ -119,11 +140,25 @@ Page({
         return
       }
       if(res.result == 'exist') {
-        wx.showToast({
-          title: '借用失败，设备已借用',
-          icon: 'none',
-          duration: 2000
+        const number = this.data.number
+        wx.showModal({
+          title: '提示',
+          showCancel: true,
+          content: '设备已经被借用',
+          cancelText: '继续',
+          confirmText: '查看设备',
+          confirmColor: '#074195',
+          success (res) {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: `/pages/deviceInfo/index?number=${number}`
+              })
+            } else if (res.cancel) {
+              
+            }
+          }
         })
+        wx.hideLoading()
         return
       }
       if(res.result.sendDevice._id) {
@@ -213,7 +248,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.setData({
+      minDate: new Date().getTime() + 180000
+    })
   },
 
   /**

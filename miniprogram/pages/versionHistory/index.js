@@ -1,33 +1,18 @@
-// miniprogram/pages/loading/loading.js
+// miniprogram/pages/versionHistory/index.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    show: 'fade-up'
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // 全局登录状态
-    if(wx.getStorageSync('userInfo')) {
-      console.log('login')
-      setTimeout(function() {
-        wx.switchTab({
-          url: '/pages/index/index'
-        })
-      }, 500)
-    }else{
-      console.log('no login')
-      setTimeout(function() {
-        wx.redirectTo({
-          url: '/pages/login/login'
-        })
-      }, 500)
-    }
+
   },
 
   /**
