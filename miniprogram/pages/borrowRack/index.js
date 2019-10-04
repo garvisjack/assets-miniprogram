@@ -134,51 +134,33 @@ Page({
       }
       console.log(res.result)
       if(res.result.data) {
-        const title = res.result.data[0].type
-        wx.showModal({
-          title: '提示',
-          showCancel: true,
-          content: '机柜已经被借用',
-          cancelText: '继续',
-          confirmText: '查看机柜',
-          confirmColor: '#074195',
-          success (res) {
-            if (res.confirm) {
-              wx.navigateTo({
-                url: `/pages/rackAccount/index?title=${title}`
-              })
-            } else if (res.cancel) {
-              
-            }
-          }
-        })
-        wx.hideLoading()
-        return
-      }
-      if(res.result.sendRack._id) {
-        wx.showModal({
-          title: '提示',
-          showCancel: true,
-          content: '借用成功！',
-          cancelText: '继续',
-          confirmText: '查看机柜',
-          confirmColor: '#074195',
-          success (res) {
-            if (res.confirm) {
-              wx.navigateTo({
-                url: '/pages/rackSend/index'
-              })
-            } else if (res.cancel) {
-              
-            }
-          }
-        })
-      }else{
+        const userName = res.result.data[0].user_name
         wx.showToast({
-          title: '借用失败，请重试',
+          title: `机柜当前被${userName}借用，无法借用`,
           icon: 'none',
-          duration: 2000
+          duration: 2500
         })
+        return
+      }else{
+        if(res.result.sendRack) {
+          wx.showModal({
+            title: '提示',
+            showCancel: true,
+            content: '借用成功！',
+            cancelText: '继续',
+            confirmText: '查看机柜',
+            confirmColor: '#074195',
+            success (res) {
+              if (res.confirm) {
+                wx.navigateTo({
+                  url: '/pages/rackSend/index'
+                })
+              } else if (res.cancel) {
+                
+              }
+            }
+          })
+        }
       }
       wx.hideLoading()
      

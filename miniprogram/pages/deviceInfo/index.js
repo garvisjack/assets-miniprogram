@@ -137,6 +137,7 @@ Page({
             }
           }
         }
+        wx.hideLoading()
         if(steps.length) {
           this.setData({
             historyList: steps
@@ -148,7 +149,6 @@ Page({
             duration: 2000
           })
         }
-        wx.hideLoading()
   
       }).catch(err => {
         wx.hideLoading()

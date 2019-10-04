@@ -14,7 +14,8 @@ Page({
     loadMore: false,
     tabActive: 0,
     titleList: ['CDV1','CDV2','CIC1','CIC2','CCC','Other'],
-    tabTitle: 'CDV1'
+    tabTitle: 'CDV1',
+    isTab: true
   },
 
   /**
@@ -27,18 +28,7 @@ Page({
         userInfo: userInfo
       })
     }
-    // 来自弹窗
-    if(options.title) {
-      const titleList = this.data.titleList
-      for(let i = 0;i<titleList.length;i++) {
-        if(titleList[i] == options.title) {
-          this.setData({
-            tabTitle: options.title,
-            tabActive: i
-          })
-        }
-      }
-    }
+
     this.getRackAccount()
   },
 
@@ -50,6 +40,10 @@ Page({
   },
 
   getRackAccount: function() {
+    let sendStatus = 1
+    if(this.data.tabActive == 2) {
+      sendStatus = 0
+    }
     wx.showLoading()
     wx.cloud.callFunction({
       // 要调用的云函数名称
@@ -58,27 +52,51 @@ Page({
       data: {
         pageIndex: this.data.curPage,
         pageSize: this.data.pageSize,
-        filter: {send_status: 1, type: this.data.tabTitle}
+        filter: {send_status: sendStatus}
       }
     }).then(res => {
-      // 获取机柜借用表中数据
+      // 获取设备借用表中数据
       if(res.result.rackAccount.data.length) {
+        // 重构过期的列表
         let accountResult = []
-        for(let item of res.result.rackAccount.data) {
-          item.expectTime = new Date(item.expect_return_time).getTime()
-          accountResult.push(item)
+        // 过期
+        if(this.data.tabActive == 0) {
+          for(let item of res.result.rackAccount.data) {
+            if(this.checkDate(item.expect_return_time) != true) {
+              item.subTime = this.checkDate(item.expect_return_time)
+              accountResult.push(item)
+            }
+          }
+          accountResult.sort(this.objectArraySort('subTime', true))
         }
-        accountResult.sort(this.objectArraySort('expectTime', false))
+        // 借用中 正常
+        if(this.data.tabActive == 1) {
+          for(let item of res.result.rackAccount.data) {
+            if(this.checkDate(item.expect_return_time) == true) {
+              accountResult.push(item)
+            }
+          }
+        }
+        // 已归还的
+        if(this.data.tabActive == 2) {
+          for(let item of res.result.rackAccount.data) {
+            item.returnTime = new Date(item.real_return_time).getTime()
+            accountResult.push(item)
+          }
+          accountResult.sort(this.objectArraySort('returnTime', true))
+        }
+
         this.setData({
           rackList: this.data.rackList.concat(accountResult),
           noData: false
         })
+        console.log(this.data.rackList)
         if(this.data.rackList.length == 0) {
           this.setData({
             noData: true
           })
         }
-        if(res.result.rackAccount.data.length == this.data.pageSize) {
+        if(accountResult.length == this.data.pageSize) {
           this.setData({
             loadMore: true
           })
@@ -93,9 +111,11 @@ Page({
             noData: true
           })
         }
+        
       }
       this.setData({
-        loading: false
+        loading: false,
+        isTab: false
       })
       wx.hideLoading()
     
@@ -136,16 +156,22 @@ Page({
   },
 
   onChangeTab(event) {
+    // 防止加载完成前多次点击
+    if(this.data.isTab) {
+      return
+    }
+
     // 重新根据条件渲染列表，从第一页开始
     this.setData({
       tabActive: event.detail.index,
-      tabTitle: event.detail.title,
       curPage: 1,
       rackList: [],
       loadMore: false,
       loading: true,
-      noData: true
+      noData: true,
+      isTab: true
     })
+
     this.getRackAccount()
   },
 

@@ -136,3 +136,12 @@ page{
 .rack-history{
     width: 100%;
 }
+.van-tab--active{
+    color: #074195 !important;
+}
+.van-tabs__line{
+    background-color: #074195 !important;
+}
+.top-tab{
+    width: 100%;
+}

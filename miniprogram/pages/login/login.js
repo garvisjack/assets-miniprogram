@@ -5,8 +5,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    username: 'llu5',
-    password: 'llu5',
+    username: '',
+    password: '',
     loginStatus: false
   },
 

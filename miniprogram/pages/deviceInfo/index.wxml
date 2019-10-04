@@ -9,7 +9,10 @@
                 <view wx:if="{{rackNumber && deviceUserName}}">设备位置：<text class="label">{{deviceUserName}}{{rackNumber}}</text></view>
                 <view wx:if="{{rackNumber}}">设备位置：<text class="label">机柜{{rackNumber}}</text></view>
                 <view wx:if="{{deviceUserName}}">设备位置：<text class="label">{{deviceUserName}}借用中</text></view>
-                <view wx:if="{{!rackNumber && !deviceUserName}}">设备位置：<text class="label">{{deviceInfo.first_location}}</text></view>
+                <view wx:if="{{!rackNumber && !deviceUserName}}">设备位置：
+                    <navigator url="{{deviceInfo.first_location}}" wx:if="{{ tools.strIndexOf(deviceInfo.first_location, 'pages') }}"><text class="label">BDA</text></navigator>
+                    <text class="label" wx:else>{{deviceInfo.first_location}}</text>
+                </view>
             </view>
         </view>
     </view>
@@ -41,3 +44,4 @@
     <image src="../../images/icons/icon-nodata.png"></image>
     <text>暂无数据</text>
 </view>
+<wxs src='../../wxs/utils.wxs' module='tools'/>

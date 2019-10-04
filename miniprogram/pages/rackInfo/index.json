@@ -7,7 +7,10 @@
       "van-search": "../../vant/search/index",
       "van-picker": "../../vant/picker/index",
       "van-popup": "../../vant//popup/index",
-      "van-steps": "../../vant/steps/index"
+      "van-steps": "../../vant/steps/index",
+      "van-tab": "../../vant/tab/index",
+      "van-tabs": "../../vant/tabs/index",
+      "van-divider": "../../vant/divider/index"
   },
   "navigationBarTitleText": "机柜信息查询"
 }

@@ -37,6 +37,9 @@ page{
 .deviceInfo-top .top-info .status .label{
     text-decoration:underline;color:#074195
 }
+navigator{
+    display: inline-block;
+}
 .deviceInfo-bottom{
     width: 100%;
     background-color: #fff;

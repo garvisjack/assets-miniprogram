@@ -9,6 +9,7 @@ Page({
     number: '',
     room: '',
     position: '',
+    positionId: '',
     roomList: [],
     positionList: [],
     allPositionList: [],
@@ -39,7 +40,8 @@ Page({
     showPicker: false,
     // 右侧滚动条高度
     positionScroll: '500',
-    toView: null
+    toView: null,
+    showToast: false
   },
 
   /**
@@ -50,6 +52,11 @@ Page({
       let userInfo = JSON.parse(wx.getStorageSync('userInfo'));
       this.setData({
         userInfo: userInfo
+      })
+    }
+    if(options.number) {
+      this.setData({
+        searchValue: options.number
       })
     }
     this.getRackPosition()
@@ -83,7 +90,8 @@ Page({
 
     this.setData({
       position: event.currentTarget.dataset.position,
-      newNumber: event.currentTarget.dataset.number
+      newNumber: event.currentTarget.dataset.number,
+      positionId: event.currentTarget.dataset.id
     })
     wx.showModal({
       title: '提示',
@@ -154,6 +162,8 @@ Page({
         return
       }
       if(res.result == 'exist') {
+        this.getRackPosition(false)
+        this.getRackPosition(true)
         wx.showToast({
           title: '操作失败，机柜使用中',
           icon: 'none',
@@ -211,8 +221,8 @@ Page({
       hasRack: false
     })
     // 匹配搜索
-    this.getRackPosition()
- 
+    this.getRackPosition(false)
+    this.getRackPosition(true)
   },
 
   onChangeSearch: function(e) {
@@ -228,7 +238,7 @@ Page({
   },
 
   // 得到机柜位置列表的数据
-  getRackPosition: function() {
+  getRackPosition: function(flag = true) {
     wx.showLoading()
     wx.cloud.callFunction({
       // 要调用的云函数名称
@@ -244,18 +254,19 @@ Page({
           allPosition: res.result.allPosition,
           noData: false
         })
-        this.getRoomList(res.result.allPosition)
+        wx.hideLoading()
+        this.getRoomList(res.result.allPosition, flag)
       }else{
         if(this.data.allPosition.length == 0) {
           this.setData({
             noData: true
           })
         }
+        wx.hideLoading()
       }
       this.setData({
         loading: false
       })
-      wx.hideLoading()
     
     }).catch(err => {
       wx.hideLoading()
@@ -266,7 +277,7 @@ Page({
   },
 
   // 过滤位置
-  getRoomList: function(arr) {
+  getRoomList: function(arr, flag) {
     let roomList = []
     let allPositionList = []
     // 遍历去重取room试验室
@@ -299,6 +310,7 @@ Page({
                 position: items.position,
                 mainActiveIndex: i
               })
+              this.chooseView(items._id)
             }
           }
           this.setData({
@@ -307,12 +319,13 @@ Page({
         }
       }
 
-      if(!this.data.hasRack) {
+      if(!this.data.hasRack && flag) {
         wx.showToast({
           title: '未找到相应机柜',
           icon: 'none',
-          duration: 2000
+          duration: 2500
         })
+        return
       }
     }
     this.getPositionList()
@@ -336,9 +349,6 @@ Page({
       for(let item of this.data.allPositionList) {
         if(item.room == this.data.room) {
           positionList.push(item)
-        }
-        if(item.rack_number.indexOf(this.data.searchValue) > -1) {
-          this.chooseView(item._id)
         }
       }
     }
@@ -496,7 +506,6 @@ Page({
   },
   
   chooseView: function(id) {
-    console.log('view')
     console.log(id)
     this.setData({
       toView: id

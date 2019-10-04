@@ -1,9 +1,17 @@
 <view class="container">
     <view class="content">
-        <text class="line line-title">版本1.0 时间20191007</text>
+        <text class="line line-title">版本1.0 时间20191005</text>
         <text class="line">1. 第一版本发布，数据从开发环境迁移到生产环境。</text>
         <br/>
-        <text class="line line-title">版本Sprint03 时间20191005</text>
+        <text class="line line-title">版本Sprint04 时间20191004</text>
+        <text class="line">1.	设备信息页面：修正编号为机柜属性时，设备位置超链接指向机柜位置页面。</text>
+        <text class="line">2.	机柜台账页面：更新标签为到期未归还，正常借用中，近期已归还。</text>
+        <text class="line">3.	机柜信息页面：增加CDV1、CDV2、CIC1、CIC2、CCC、Other标签。</text>
+        <text class="line">4.	机柜借用页面：修正借用一个已经借用的机柜弹窗（弹窗中包含已被借用的信息），修正真机调试过程中回调函数不及时问题。</text>
+        <text class="line">5.	机柜位置页面：修正输入一个非机柜编号弹窗消失过快问题。</text>
+
+        <br/>
+        <text class="line line-title">版本Sprint03 时间20191003</text>
         <text class="line">1. 登录页面：增加Logo</text>
         <text class="line">2. 设备借用页面：修正时间选择器初始时间不更新问题，增加借用已经被借用的设备可以查看设备信息功能。</text>
         <text class="line">3. 机柜借用页面：修正时间选择器初始时间不更新问题。</text>

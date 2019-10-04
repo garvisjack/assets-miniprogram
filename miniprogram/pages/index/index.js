@@ -90,7 +90,6 @@ Page({
         filter: {user_id: this.data.userInfo._id,send_status: 1}
       }
     }).then(res => {
-      console.log(res.result)
       // 基础信息
       if(res.result.allDeviceSend.length) {
         this.setData({

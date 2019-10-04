@@ -21,7 +21,15 @@ Page({
     addDevicelist: [],
     showHistory: false,
     rackSendHistory: [],
-    historyList: []
+    historyList: [],
+    // 分类机柜
+    curPage: 1,
+    pageSize: 100,
+    tabActive: 10,
+    titleList: ['CDV1','CDV2','CIC1','CIC2','CCC','Other'],
+    tabTitle: 'CDV1',
+    rackList: [],
+    showTab: true
   },
 
   /**
@@ -38,12 +46,22 @@ Page({
       this.setData({
         searchValue: options.number
       })
+      this.getRackInfo()
     }
+  },
+
+  showRackInfo: function(event) {
+    this.setData({
+      searchValue: event.currentTarget.dataset.number
+    })
     this.getRackInfo()
   },
 
   // 获取机柜信息
   getRackInfo: function() {
+    this.setData({
+      showTab: false
+    })
     wx.showLoading()
     wx.cloud.callFunction({
       // 要调用的云函数名称
@@ -58,12 +76,17 @@ Page({
       if(res.result.rackInfo.data[0]) {
         this.setData({
           rackInfo: res.result.rackInfo.data[0],
-          noData: false
+          noData: false,
+          showTab: false,
+          rackList: []
         })
       }else{
         this.setData({
           rackInfo: [],
-          noData: true
+          noData: true,
+          showTab: true,
+          tabActive: 10,
+          rackList: []
         })
       }
       this.setData({
@@ -312,7 +335,6 @@ Page({
         duration: 2000
       })
     }).catch(err => {
-      console.log(err)
       wx.hideLoading()
       this.setData({
         loading: false,
@@ -399,7 +421,7 @@ Page({
             item.text = `${item.user_name}从机柜中移除${item.device_number}`
           }
         }
-
+        wx.hideLoading()
         if(steps.length) {
           this.setData({
             historyList: steps
@@ -411,7 +433,6 @@ Page({
             duration: 2000
           })
         }
-        wx.hideLoading()
   
       }).catch(err => {
         wx.hideLoading()
@@ -420,6 +441,47 @@ Page({
         })
       })
     }
+  },
+
+  onChangeTab(event) {
+    // 重新根据条件渲染列表，从第一页开始
+    this.setData({
+      tabActive: event.detail.index,
+      tabTitle: event.detail.title,
+      curPage: 1,
+      rackList: []
+    })
+    this.getTypeRack()
+  },
+
+  getTypeRack: function() {
+    wx.showLoading()
+    wx.cloud.callFunction({
+      // 要调用的云函数名称
+      name: 'getTypeRack',
+      // 传递给云函数的event参数
+      data: {
+        pageIndex: this.data.curPage,
+        pageSize: this.data.pageSize,
+        filter: {type: this.data.tabTitle}
+      }
+    }).then(res => {
+      console.log(res.result.typeRack.data)
+      if(res.result.typeRack.data.length) {
+        this.setData({
+          rackList: this.data.rackList.concat(res.result.typeRack.data)
+        })
+      }
+      wx.hideLoading()
+    
+    }).catch(err => {
+      wx.hideLoading()
+      wx.showToast({
+        title: '获取数据失败，请重试',
+        icon: 'none',
+        duration: 2000
+      })
+    })
   },
 
   /**

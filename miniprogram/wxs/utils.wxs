@@ -1,0 +1,8 @@
+var strIndexOf = function (val, item) {
+    if(val.indexOf(item) > -1) {
+        return true
+    }else{
+        return false
+    }
+}
+module.exports.strIndexOf = strIndexOf;

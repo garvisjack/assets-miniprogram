@@ -32,7 +32,7 @@ Page({
     wx.showModal({
       title: '意见反馈',
       showCancel: false,
-      content: '联系陈先生：13588888888',
+      content: '联系LLU5',
       confirmText: '知道了',
       confirmColor: '#074195',
       success (res) {
@@ -55,7 +55,7 @@ Page({
     wx.showModal({
       title: '关于',
       showCancel: false,
-      content: '该小程序版权归公司所有',
+      content: '版本1.0 时间20191005',
       confirmText: '知道了',
       confirmColor: '#074195',
       success (res) {
