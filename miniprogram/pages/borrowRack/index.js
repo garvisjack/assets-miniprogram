@@ -132,7 +132,7 @@ Page({
         })
         return
       }
-      console.log(res.result.data[0].type)
+      console.log(res.result)
       if(res.result.data) {
         const title = res.result.data[0].type
         wx.showModal({

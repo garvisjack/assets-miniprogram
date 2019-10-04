@@ -5,8 +5,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    username: '',
-    password: '',
+    username: 'llu5',
+    password: 'llu5',
     loginStatus: false
   },
 
@@ -77,6 +77,7 @@ Page({
         })
       }
     }).catch(err => {
+      console.log(err)
       wx.hideLoading()
       wx.showToast({
         title: '登录失败，请重试',

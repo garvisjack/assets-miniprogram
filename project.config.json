@@ -10,8 +10,8 @@
 		"autoAudits": false,
 		"checkInvalidKey": true
 	},
-	"appid": "wxa6fc2af616fb37a3",
-	"projectname": "assets-miniprogram",
+	"appid": "wxcae81d589809fdce",
+	"projectname": "assets-miniprogram-prod",
 	"libVersion": "2.2.5",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},

@@ -1,7 +1,10 @@
 //index.js
 const app = getApp()
 
-wx.cloud.init()
+wx.cloud.init({
+  traceUser: true,
+  env: 'prod-hlfc5'
+})
 const db = wx.cloud.database()
 const _ = db.command
 

@@ -299,7 +299,6 @@ Page({
                 position: items.position,
                 mainActiveIndex: i
               })
-              this.chooseView(items._id)
             }
           }
           this.setData({
@@ -337,6 +336,9 @@ Page({
       for(let item of this.data.allPositionList) {
         if(item.room == this.data.room) {
           positionList.push(item)
+        }
+        if(item.rack_number.indexOf(this.data.searchValue) > -1) {
+          this.chooseView(item._id)
         }
       }
     }
@@ -494,6 +496,8 @@ Page({
   },
   
   chooseView: function(id) {
+    console.log('view')
+    console.log(id)
     this.setData({
       toView: id
     })

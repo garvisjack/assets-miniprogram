@@ -4,7 +4,10 @@
 const cloud = require('wx-server-sdk')
 
 // 初始化 cloud
-cloud.init()
+cloud.init({
+  traceUser: true,
+  env: 'prod-hlfc5'
+})
 const db = cloud.database()
 const _ = db.command
 /**
