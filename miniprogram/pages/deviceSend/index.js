@@ -73,7 +73,7 @@ Page({
               wx.showToast({
                 title: '归还成功',
                 icon: 'none',
-                duration: 2000
+                duration: 3000
               })
             }
             that.setData({
@@ -117,8 +117,13 @@ Page({
     }).then(res => {
       // 获取设备借用表中数据
       if(res.result.deviceSend.data.length) {
-        // 连表查询设备名称
-        let result = res.result.deviceSend.data
+        // 连表查询设备名称，只查询借用的
+        const result = []
+        for(let item of res.result.deviceSend.data) {
+          if(item.send_status == 1) {
+            result.push(item)
+          }
+        }
         for(let val of result) {
           if(this.checkDate(val.expect_return_time)) {
             val.expired = 0
@@ -127,9 +132,17 @@ Page({
           }
         }
         this.setData({
-          deviceList: this.data.deviceList.concat(result),
-          noData: false
+          deviceList: this.data.deviceList.concat(result)
         })
+        if(this.data.deviceList.length == 0) {
+          this.setData({
+            noData: true
+          })
+        }else{
+          this.setData({
+            noData: false
+          })
+        }
       }else{
         if(this.data.deviceList.length == 0) {
           this.setData({

@@ -31,17 +31,16 @@ Page({
   },
 
   onLoad: function() {
+  
+  },
+
+  onShow: function () {
     if(wx.getStorageSync('userInfo')) {
       let userInfo = JSON.parse(wx.getStorageSync('userInfo'));
       this.setData({
         userInfo: userInfo
       })
     }
-    this.getBannerList()
-    this.getHomeData()
-  },
-
-  onShow: function () {
     this.getBannerList()
     this.getHomeData()
   },  
@@ -91,6 +90,7 @@ Page({
       }
     }).then(res => {
       // 基础信息
+      console.log(res.result)
       if(res.result.allDeviceSend.length) {
         this.setData({
           deviceSend: res.result.allDeviceSend[0].data,
@@ -113,11 +113,13 @@ Page({
           deviceSend: []
         })
       }
+      this.setData({
+        deviceNum: res.result.total
+      })
       // 机柜借用数量
       if(res.result.allRackSend.length) {
         this.setData({
-          rackSend: res.result.allRackSend[0].data,
-          rackNum: res.result.rackTotal
+          rackSend: res.result.allRackSend[0].data
         })
         // 找出借用中，超过归还时间的过期设备
         let rackNum = 0
@@ -136,6 +138,9 @@ Page({
           rackSend: []
         })
       }
+      this.setData({
+        rackNum: res.result.rackTotal
+      })
       wx.hideLoading()
 
     }).catch(err => {
